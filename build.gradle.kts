@@ -6,7 +6,7 @@ plugins {
 
 group = "com.github.sgtsilvio.gradle"
 version = "0.1.0"
-description = "Gradle plugin to ease defining project metadata (urls, licenses, scm)"
+description = "Gradle plugin to ease defining project metadata (urls, license, scm)"
 
 tasks {
     compileKotlin {
@@ -30,7 +30,7 @@ gradlePlugin {
     plugins {
         create("metadata") {
             id = "com.github.sgtsilvio.gradle.metadata"
-            displayName = "Metadata for projects"
+            displayName = "Metadata for gradle projects"
             description = project.description
             implementationClass = "com.github.sgtsilvio.gradle.metadata.MetadataPlugin"
         }
