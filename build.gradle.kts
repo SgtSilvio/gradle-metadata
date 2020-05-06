@@ -1,7 +1,7 @@
 plugins {
-    kotlin("jvm") version "1.3.72"
+    kotlin("jvm")
     id("java-gradle-plugin")
-    id("com.gradle.plugin-publish") version "0.11.0"
+    id("com.gradle.plugin-publish")
 }
 
 group = "com.github.sgtsilvio.gradle"
@@ -23,7 +23,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("biz.aQute.bnd:biz.aQute.bnd.gradle:5.0.1")
+    implementation("biz.aQute.bnd:biz.aQute.bnd.gradle:${property("bnd.gradle.version")}")
 }
 
 gradlePlugin {
