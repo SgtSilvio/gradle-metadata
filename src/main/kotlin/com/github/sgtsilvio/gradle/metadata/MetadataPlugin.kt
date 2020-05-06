@@ -13,7 +13,7 @@ import org.gradle.api.publish.maven.MavenPublication
 class MetadataPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
-        val metadata = project.extensions.create(MetadataExtension::class.java, "com/github/sgtsilvio/gradle/metadata", MetadataExtensionImpl::class.java)
+        val metadata = project.extensions.create(MetadataExtension::class.java, "metadata", MetadataExtensionImpl::class.java)
         project.afterEvaluate {
             setPomMetadata(it, metadata)
             setBndMetadata(it, metadata)
