@@ -5,7 +5,6 @@ plugins {
 }
 
 group = "com.github.sgtsilvio.gradle"
-version = "${property("version")}"
 description = "Gradle plugin to ease defining project metadata (urls, license, scm)"
 
 tasks {

@@ -38,7 +38,7 @@ metadata {
         developer {
             id = "jdoe"
             name = "John Doe"
-            email = "johnl@doe.example"
+            email = "john@doe.example"
         }
     }
     github {
