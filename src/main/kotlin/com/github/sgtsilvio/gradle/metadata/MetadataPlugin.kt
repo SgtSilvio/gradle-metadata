@@ -4,6 +4,7 @@ import aQute.bnd.gradle.BundleTaskConvention
 import com.github.sgtsilvio.gradle.metadata.internal.MetadataExtensionImpl
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
 
@@ -66,7 +67,7 @@ class MetadataPlugin : Plugin<Project> {
 
     private fun setBndMetadata(project: Project, metadata: MetadataExtension) {
         project.plugins.withId("biz.aQute.bnd.builder") {
-            project.tasks.named("jar") { task ->
+            project.tasks.named(JavaPlugin.JAR_TASK_NAME) { task ->
                 task.convention.getPlugin(BundleTaskConvention::class.java).bnd(
                         "Automatic-Module-Name=${metadata.moduleName}",
                         "Bundle-Name=${project.name}",

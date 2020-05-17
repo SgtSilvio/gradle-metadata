@@ -5,8 +5,7 @@ import com.github.sgtsilvio.gradle.metadata.GithubMetadata
 /**
  * @author Silvio Giebl
  */
-class GithubMetadataImpl(private val metadataExtension: MetadataExtensionImpl) :
-    GithubMetadata {
+class GithubMetadataImpl(private val metadataExtension: MetadataExtensionImpl) : GithubMetadata {
     override var org: String? = null
     override var repo: String? = null
 
