@@ -14,7 +14,8 @@ import org.gradle.api.publish.maven.MavenPublication
 class MetadataPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
-        val metadata = project.extensions.create(MetadataExtension::class.java, "metadata", MetadataExtensionImpl::class.java)
+        val metadata =
+            project.extensions.create(MetadataExtension::class.java, "metadata", MetadataExtensionImpl::class.java)
         project.afterEvaluate {
             setPomMetadata(it, metadata)
             setBndMetadata(it, metadata)
@@ -24,44 +25,46 @@ class MetadataPlugin : Plugin<Project> {
     private fun setPomMetadata(project: Project, metadata: MetadataExtension) {
         project.plugins.withId("maven-publish") {
             project.extensions
-                    .getByType(PublishingExtension::class.java)
-                    .publications
-                    .withType(MavenPublication::class.java)
-                    .configureEach { mavenPublication ->
-                        mavenPublication.pom { pom ->
-                            pom.name.set(metadata.readableName)
-                            pom.description.set(project.description)
-                            pom.url.set(metadata.url)
-                            pom.organization { organization ->
-                                organization.name.set(metadata.organization.name)
-                                organization.url.set(metadata.organization.url)
-                            }
-                            pom.licenses { licenses ->
-                                licenses.license { license ->
-                                    license.name.set(metadata.license.readableName)
-                                    license.url.set(metadata.license.url)
-                                }
-                            }
-                            pom.developers { developers ->
-                                metadata.developers.forEach {
-                                    developers.developer { developer ->
-                                        developer.id.set(it.id)
-                                        developer.name.set(it.name)
-                                        developer.email.set(it.email)
-                                    }
-                                }
-                            }
-                            pom.scm { scm ->
-                                scm.connection.set(metadata.scm.connection)
-                                scm.developerConnection.set(metadata.scm.developerConnection)
-                                scm.url.set(metadata.scm.url)
-                            }
-                            pom.issueManagement { issueManagement ->
-                                issueManagement.system.set(metadata.issueManagement.system)
-                                issueManagement.url.set(metadata.issueManagement.url)
+                .getByType(PublishingExtension::class.java)
+                .publications
+                .withType(MavenPublication::class.java)
+                .configureEach { mavenPublication ->
+                    mavenPublication.pom { pom ->
+                        pom.name.set(pom.name.orNull ?: metadata.readableName)
+                        pom.description.set(pom.description.orNull ?: project.description)
+                        pom.url.set(pom.url.orNull ?: metadata.url)
+                        pom.organization { organization ->
+                            organization.name.set(organization.name.orNull ?: metadata.organization.name)
+                            organization.url.set(organization.url.orNull ?: metadata.organization.url)
+                        }
+                        pom.licenses { licenses ->
+                            licenses.license { license ->
+                                license.name.set(license.name.orNull ?: metadata.license.readableName)
+                                license.url.set(license.url.orNull ?: metadata.license.url)
                             }
                         }
+                        pom.developers { developers ->
+                            metadata.developers.forEach {
+                                developers.developer { developer ->
+                                    developer.id.set(it.id)
+                                    developer.name.set(it.name)
+                                    developer.email.set(it.email)
+                                }
+                            }
+                        }
+                        pom.scm { scm ->
+                            scm.connection.set(scm.connection.orNull ?: metadata.scm.connection)
+                            scm.developerConnection.set(
+                                scm.developerConnection.orNull ?: metadata.scm.developerConnection
+                            )
+                            scm.url.set(scm.url.orNull ?: metadata.scm.url)
+                        }
+                        pom.issueManagement { issueManagement ->
+                            issueManagement.system.set(issueManagement.system.orNull ?: metadata.issueManagement.system)
+                            issueManagement.url.set(issueManagement.url.orNull ?: metadata.issueManagement.url)
+                        }
                     }
+                }
         }
     }
 
@@ -69,18 +72,19 @@ class MetadataPlugin : Plugin<Project> {
         project.plugins.withId("biz.aQute.bnd.builder") {
             project.tasks.named(JavaPlugin.JAR_TASK_NAME) { task ->
                 task.convention.getPlugin(BundleTaskConvention::class.java).bnd(
-                        "Automatic-Module-Name=${metadata.moduleName}",
-                        "Bundle-Name=${project.name}",
-                        "Bundle-SymbolicName=${metadata.moduleName}",
-                        "Bundle-Description=${project.description}",
-                        "Bundle-Vendor=${metadata.organization.name}",
-                        "Bundle-License=${metadata.license.shortName};" +
-                                "description=\"${metadata.license.readableName}\";" +
-                                "link=\"${metadata.license.url}\"",
-                        "Bundle-DocURL=${metadata.docUrl}",
-                        "Bundle-SCM=url=\"${metadata.scm.url}\";" +
-                                "connection=\"${metadata.scm.connection}\";" +
-                                "developerConnection=\"${metadata.scm.developerConnection}\"")
+                    "Automatic-Module-Name=${metadata.moduleName}",
+                    "Bundle-Name=${project.name}",
+                    "Bundle-SymbolicName=${metadata.moduleName}",
+                    "Bundle-Description=${project.description}",
+                    "Bundle-Vendor=${metadata.organization.name}",
+                    "Bundle-License=${metadata.license.shortName};" +
+                            "description=\"${metadata.license.readableName}\";" +
+                            "link=\"${metadata.license.url}\"",
+                    "Bundle-DocURL=${metadata.docUrl}",
+                    "Bundle-SCM=url=\"${metadata.scm.url}\";" +
+                            "connection=\"${metadata.scm.connection}\";" +
+                            "developerConnection=\"${metadata.scm.developerConnection}\""
+                )
             }
         }
     }
