@@ -1,49 +1,32 @@
 package com.github.sgtsilvio.gradle.metadata
 
 import org.gradle.api.Action
+import org.gradle.api.provider.Property
 
 /**
  * @author Silvio Giebl
  */
 interface MetadataExtension {
-    var moduleName: String?
-    var readableName: String?
-    var url: String?
-    var docUrl: String?
-    val organization: OrganizationMetadata
-    val license: LicenseMetadata
+    val moduleName: Property<String>
+    val readableName: Property<String>
+    val url: Property<String>
+    val docUrl: Property<String>
+    val organization: OrganizationMetadata?
+    val license: LicenseMetadata?
     val developers: DevelopersMetadata
-    val scm: ScmMetadata
-    val issueManagement: IssueManagementMetadata
-    val github: GithubMetadata
+    val scm: ScmMetadata?
+    val issueManagement: IssueManagementMetadata?
+    val github: GithubMetadata?
 
-    fun organization(action: Action<in OrganizationMetadata>) {
-        action.execute(organization)
-    }
+    fun organization(action: Action<in OrganizationMetadata>)
 
-    fun license(action: Action<in LicenseMetadata>) {
-        action.execute(license)
-    }
+    fun license(action: Action<in LicenseMetadata>)
 
-    fun developers(action: Action<in DevelopersMetadata>) {
-        action.execute(developers)
-    }
+    fun developers(action: Action<in DevelopersMetadata>)
 
-    fun scm(action: Action<in ScmMetadata>) {
-        action.execute(scm)
-    }
+    fun scm(action: Action<in ScmMetadata>)
 
-    fun issueManagement(action: Action<in IssueManagementMetadata>) {
-        action.execute(issueManagement)
-    }
+    fun issueManagement(action: Action<in IssueManagementMetadata>)
 
-    fun github(action: Action<in GithubMetadata>) {
-        action.execute(github)
-        if (url == null) {
-            url = github.url
-        }
-        scm.url = github.vcsUrl
-        scm.connection = "scm:git:git://github.com/${github.org}/${github.repo}.git"
-        scm.developerConnection = "scm:git:ssh://git@github.com/${github.org}/${github.repo}.git"
-    }
+    fun github(action: Action<in GithubMetadata>)
 }

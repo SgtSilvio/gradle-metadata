@@ -1,10 +1,12 @@
 package com.github.sgtsilvio.gradle.metadata
 
+import org.gradle.api.provider.Property
+
 /**
  * @author Silvio Giebl
  */
 interface ScmMetadata {
-    var url: String?
-    var connection: String?
-    var developerConnection: String?
+    val url: Property<String>
+    val connection: Property<String>
+    val developerConnection: Property<String>
 }

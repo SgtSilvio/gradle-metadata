@@ -1,17 +1,20 @@
 package com.github.sgtsilvio.gradle.metadata
 
+import org.gradle.api.provider.Property
+import org.gradle.api.provider.Provider
+
 /**
  * @author Silvio Giebl
  */
 interface GithubMetadata {
-    var org: String?
-    var repo: String?
-    val url: String?
-    val vcsUrl: String?
-    val pagesUrl: String?
-    val issuesUrl: String?
-
-    fun pages()
+    val org: Property<String>
+    val repo: Property<String>
+    val url: Provider<String>
+    val vcsUrl: Provider<String>
+    val pagesUrl: Provider<String>
+    val issuesUrl: Provider<String>
 
     fun issues()
+
+    fun pages()
 }

@@ -1,9 +1,11 @@
 package com.github.sgtsilvio.gradle.metadata
 
+import org.gradle.api.provider.Property
+
 /**
  * @author Silvio Giebl
  */
 interface OrganizationMetadata {
-    var name: String?
-    var url: String?
+    val name: Property<String>
+    val url: Property<String>
 }

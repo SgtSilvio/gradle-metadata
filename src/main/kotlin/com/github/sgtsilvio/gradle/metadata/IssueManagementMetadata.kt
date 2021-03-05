@@ -1,9 +1,11 @@
 package com.github.sgtsilvio.gradle.metadata
 
+import org.gradle.api.provider.Property
+
 /**
  * @author Silvio Giebl
  */
 interface IssueManagementMetadata {
-    var system: String?
-    var url: String?
+    val system: Property<String>
+    val url: Property<String>
 }

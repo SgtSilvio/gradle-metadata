@@ -1,10 +1,12 @@
 package com.github.sgtsilvio.gradle.metadata
 
+import org.gradle.api.provider.Property
+
 /**
  * @author Silvio Giebl
  */
 interface DeveloperMetadata {
-    var id: String?
-    var name: String?
-    var email: String?
+    val id: Property<String>
+    val name: Property<String>
+    val email: Property<String>
 }

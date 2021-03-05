@@ -14,15 +14,17 @@ import org.gradle.api.publish.maven.MavenPublication
 class MetadataPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
-        val metadata =
-            project.extensions.create(MetadataExtension::class.java, "metadata", MetadataExtensionImpl::class.java)
-        project.afterEvaluate {
-            setPomMetadata(it, metadata)
-            setBndMetadata(it, metadata)
-        }
+        val metadata = project.extensions.create(
+            MetadataExtension::class.java,
+            "metadata",
+            MetadataExtensionImpl::class.java
+        ) as MetadataExtensionImpl
+
+        setPomMetadata(project, metadata)
+        setBndMetadata(project, metadata)
     }
 
-    private fun setPomMetadata(project: Project, metadata: MetadataExtension) {
+    private fun setPomMetadata(project: Project, metadata: MetadataExtensionImpl) {
         project.plugins.withId("maven-publish") {
             project.extensions
                 .getByType(PublishingExtension::class.java)
@@ -30,38 +32,44 @@ class MetadataPlugin : Plugin<Project> {
                 .withType(MavenPublication::class.java)
                 .configureEach { mavenPublication ->
                     mavenPublication.pom { pom ->
-                        pom.name.set(pom.name.orNull ?: metadata.readableName)
-                        pom.description.set(pom.description.orNull ?: project.description)
-                        pom.url.set(pom.url.orNull ?: metadata.url)
-                        pom.organization { organization ->
-                            organization.name.set(organization.name.orNull ?: metadata.organization.name)
-                            organization.url.set(organization.url.orNull ?: metadata.organization.url)
-                        }
-                        pom.licenses { licenses ->
-                            licenses.license { license ->
-                                license.name.set(license.name.orNull ?: metadata.license.readableName)
-                                license.url.set(license.url.orNull ?: metadata.license.url)
+                        pom.name.convention(metadata.readableName)
+                        pom.description.convention(project.provider { project.description })
+                        pom.url.convention(metadata.url)
+                        metadata.withOrganization { organization ->
+                            pom.organization { pomOrganization ->
+                                pomOrganization.name.convention(organization.name)
+                                pomOrganization.url.convention(organization.url)
                             }
                         }
-                        pom.developers { developers ->
-                            metadata.developers.forEach {
-                                developers.developer { developer ->
-                                    developer.id.set(it.id)
-                                    developer.name.set(it.name)
-                                    developer.email.set(it.email)
+                        pom.licenses { licenses ->
+                            metadata.withLicense { license ->
+                                licenses.license { pomLicense ->
+                                    pomLicense.name.set(license.readableName)
+                                    pomLicense.url.set(license.url)
                                 }
                             }
                         }
-                        pom.scm { scm ->
-                            scm.connection.set(scm.connection.orNull ?: metadata.scm.connection)
-                            scm.developerConnection.set(
-                                scm.developerConnection.orNull ?: metadata.scm.developerConnection
-                            )
-                            scm.url.set(scm.url.orNull ?: metadata.scm.url)
+                        pom.developers { developers ->
+                            metadata.developers.withDeveloper { developer ->
+                                developers.developer { pomDeveloper ->
+                                    pomDeveloper.id.set(developer.id)
+                                    pomDeveloper.name.set(developer.name)
+                                    pomDeveloper.email.set(developer.email)
+                                }
+                            }
                         }
-                        pom.issueManagement { issueManagement ->
-                            issueManagement.system.set(issueManagement.system.orNull ?: metadata.issueManagement.system)
-                            issueManagement.url.set(issueManagement.url.orNull ?: metadata.issueManagement.url)
+                        metadata.withScm { scm ->
+                            pom.scm { pomScm ->
+                                pomScm.connection.convention(scm.connection)
+                                pomScm.developerConnection.convention(scm.developerConnection)
+                                pomScm.url.convention(scm.url)
+                            }
+                        }
+                        metadata.withIssueManagement { issueManagement ->
+                            pom.issueManagement { pomIssueManagement ->
+                                pomIssueManagement.system.convention(issueManagement.system)
+                                pomIssueManagement.url.convention(issueManagement.url)
+                            }
                         }
                     }
                 }
@@ -70,21 +78,36 @@ class MetadataPlugin : Plugin<Project> {
 
     private fun setBndMetadata(project: Project, metadata: MetadataExtension) {
         project.plugins.withId("biz.aQute.bnd.builder") {
-            project.tasks.named(JavaPlugin.JAR_TASK_NAME) { task ->
-                task.convention.getPlugin(BundleTaskConvention::class.java).bnd(
-                    "Automatic-Module-Name=${metadata.moduleName}",
-                    "Bundle-Name=${project.name}",
-                    "Bundle-SymbolicName=${metadata.moduleName}",
-                    "Bundle-Description=${project.description}",
-                    "Bundle-Vendor=${metadata.organization.name}",
-                    "Bundle-License=${metadata.license.shortName};" +
-                            "description=\"${metadata.license.readableName}\";" +
-                            "link=\"${metadata.license.url}\"",
-                    "Bundle-DocURL=${metadata.docUrl}",
-                    "Bundle-SCM=url=\"${metadata.scm.url}\";" +
-                            "connection=\"${metadata.scm.connection}\";" +
-                            "developerConnection=\"${metadata.scm.developerConnection}\""
-                )
+            project.afterEvaluate {
+                project.tasks.named(JavaPlugin.JAR_TASK_NAME) { task ->
+                    val bundleTaskConvention = task.convention.getPlugin(BundleTaskConvention::class.java)
+                    bundleTaskConvention.bnd("Bundle-Name=${project.name}")
+                    bundleTaskConvention.bnd("Bundle-Description=${project.description}")
+                    metadata.moduleName.orNull?.let { moduleName ->
+                        bundleTaskConvention.bnd("Automatic-Module-Name=$moduleName")
+                        bundleTaskConvention.bnd("Bundle-SymbolicName=$moduleName")
+                    }
+                    metadata.organization?.let { organization ->
+                        bundleTaskConvention.bnd("Bundle-Vendor=${organization.name.get()}")
+                    }
+                    metadata.license?.let { license ->
+                        bundleTaskConvention.bnd(
+                            "Bundle-License=${license.shortName.get()};" +
+                                    "description=\"${license.readableName.get()}\";" +
+                                    "link=\"${license.url.get()}\""
+                        )
+                    }
+                    metadata.docUrl.orNull?.let { docUrl ->
+                        bundleTaskConvention.bnd("Bundle-DocURL=$docUrl")
+                    }
+                    metadata.scm?.let { scm ->
+                        bundleTaskConvention.bnd(
+                            "Bundle-SCM=url=\"${scm.url.get()}\";" +
+                                    "connection=\"${scm.connection.get()}\";" +
+                                    "developerConnection=\"${scm.developerConnection.get()}\""
+                        )
+                    }
+                }
             }
         }
     }
