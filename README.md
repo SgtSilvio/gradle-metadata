@@ -8,7 +8,7 @@ Gradle plugin to ease defining project metadata:
 - url, docUrl
 - organization
 - license
-- developer
+- developers
 - issue management
 - github
 
@@ -21,29 +21,29 @@ Gradle plugin to ease defining project metadata:
 
 ```kotlin
 plugins {
-    id("com.github.sgtsilvio.gradle.metadata") version "0.1.2"
+    id("com.github.sgtsilvio.gradle.metadata") version "0.2.0"
 }
 
 metadata {
-    moduleName = "com.github.sgtsilvio.gradle.metadata"
-    readableName = "Metadata for gradle projects"
+    moduleName.set("com.github.sgtsilvio.gradle.metadata")
+    readableName.set("Metadata for gradle projects")
     license {
         apache2()
     }
     organization {
-        name = "testorg"
-        url = "https://www.testorg.example/"
+        name.set("testorg")
+        url.set("https://www.testorg.example/")
     }
     developers {
         developer {
-            id = "jdoe"
-            name = "John Doe"
-            email = "john@doe.example"
+            id.set("jdoe")
+            name.set("John Doe")
+            email.set("john@doe.example")
         }
     }
     github {
-        org = "SgtSilvio"
-        repo = "gradle-metadata"
+        org.set("SgtSilvio")
+        repo.set("gradle-metadata")
         pages()
         issues()
     }
