@@ -21,8 +21,7 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
-    implementation("biz.aQute.bnd:biz.aQute.bnd.gradle:${property("bnd.gradle.version")}")
+    compileOnly("biz.aQute.bnd:biz.aQute.bnd.gradle:${property("bnd.gradle.version")}")
 }
 
 gradlePlugin {
