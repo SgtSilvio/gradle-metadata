@@ -1,7 +1,6 @@
 package com.github.sgtsilvio.gradle.metadata.internal
 
 import com.github.sgtsilvio.gradle.metadata.GithubMetadata
-import org.gradle.api.Action
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
@@ -25,10 +24,10 @@ class GithubMetadataImpl(private val metadataExtension: MetadataExtensionImpl, o
         org.flatMap { org -> repo.map { repo -> "https://$org.github.io/$repo/" } }
 
     override fun issues() {
-        metadataExtension.issueManagement(Action { issueManagement ->
+        metadataExtension.issueManagement { issueManagement ->
             issueManagement.system.set("GitHub Issues")
             issueManagement.url.set(issuesUrl)
-        })
+        }
     }
 
     override fun pages() {

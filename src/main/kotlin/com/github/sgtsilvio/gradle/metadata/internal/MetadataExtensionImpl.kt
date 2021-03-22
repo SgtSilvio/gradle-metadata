@@ -36,11 +36,11 @@ open class MetadataExtensionImpl(private val objectFactory: ObjectFactory) : Met
     init {
         withGithub { github ->
             url.convention(github.url)
-            scm(Action { scm ->
+            scm { scm ->
                 scm.url.convention(github.vcsUrl)
                 scm.connection.convention(github.vcsUrl.map { url -> "scm:git:$url" })
                 scm.developerConnection.convention(github.vcsUrl.map { url -> "scm:git:$url" })
-            })
+            }
         }
     }
 
