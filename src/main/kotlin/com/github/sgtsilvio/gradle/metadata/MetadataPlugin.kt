@@ -2,6 +2,7 @@ package com.github.sgtsilvio.gradle.metadata
 
 import aQute.bnd.gradle.BundleTaskConvention
 import com.github.sgtsilvio.gradle.metadata.internal.MetadataExtensionImpl
+import com.github.sgtsilvio.gradle.metadata.internal.mergeProviders
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
@@ -76,37 +77,29 @@ class MetadataPlugin : Plugin<Project> {
         }
     }
 
-    private fun setBndMetadata(project: Project, metadata: MetadataExtension) {
+    private fun setBndMetadata(project: Project, metadata: MetadataExtensionImpl) {
         project.plugins.withId("biz.aQute.bnd.builder") {
-            project.afterEvaluate {
-                project.tasks.named(JavaPlugin.JAR_TASK_NAME) { task ->
-                    val bundleTaskConvention = task.convention.getPlugin(BundleTaskConvention::class.java)
-                    bundleTaskConvention.bnd("Bundle-Name=${project.name}")
-                    bundleTaskConvention.bnd("Bundle-Description=${project.description}")
-                    metadata.moduleName.orNull?.let { moduleName ->
-                        bundleTaskConvention.bnd("Automatic-Module-Name=$moduleName")
-                        bundleTaskConvention.bnd("Bundle-SymbolicName=$moduleName")
-                    }
-                    metadata.organization?.let { organization ->
-                        bundleTaskConvention.bnd("Bundle-Vendor=${organization.name.get()}")
-                    }
-                    metadata.license?.let { license ->
-                        bundleTaskConvention.bnd(
-                            "Bundle-License=${license.shortName.get()};" +
-                                    "description=\"${license.readableName.get()}\";" +
-                                    "link=\"${license.url.get()}\""
-                        )
-                    }
-                    metadata.docUrl.orNull?.let { docUrl ->
-                        bundleTaskConvention.bnd("Bundle-DocURL=$docUrl")
-                    }
-                    metadata.scm?.let { scm ->
-                        bundleTaskConvention.bnd(
-                            "Bundle-SCM=url=\"${scm.url.get()}\";" +
-                                    "connection=\"${scm.connection.get()}\";" +
-                                    "developerConnection=\"${scm.developerConnection.get()}\""
-                        )
-                    }
+            project.tasks.named(JavaPlugin.JAR_TASK_NAME) { task ->
+                val bundleTaskConvention = task.convention.getPlugin(BundleTaskConvention::class.java)
+                bundleTaskConvention.bnd("Bundle-Name=${project.name}")
+                bundleTaskConvention.bnd(project.provider { "Bundle-Description=${project.description}" })
+                bundleTaskConvention.bnd(metadata.moduleName.map { moduleName -> "Automatic-Module-Name=$moduleName" })
+                bundleTaskConvention.bnd(metadata.moduleName.map { moduleName -> "Bundle-SymbolicName=$moduleName" })
+                metadata.withOrganization { organization ->
+                    bundleTaskConvention.bnd(organization.name.map { name -> "Bundle-Vendor=$name}" })
+                }
+                metadata.withLicense { license ->
+                    bundleTaskConvention.bnd(
+                        mergeProviders(license.shortName, license.readableName, license.url) { short, readable, url ->
+                            "Bundle-License=$short;description=\"$readable\";link=\"$url\""
+                        })
+                }
+                bundleTaskConvention.bnd(metadata.docUrl.map { docUrl -> "Bundle-DocURL=$docUrl" })
+                metadata.withScm { scm ->
+                    bundleTaskConvention.bnd(
+                        mergeProviders(scm.url, scm.connection, scm.developerConnection) { url, con, devCon ->
+                            "Bundle-SCM=url=\"$url\";connection=\"$con\";developerConnection=\"$devCon\""
+                        })
                 }
             }
         }

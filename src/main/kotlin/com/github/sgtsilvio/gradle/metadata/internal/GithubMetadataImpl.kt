@@ -14,14 +14,13 @@ class GithubMetadataImpl(private val metadataExtension: MetadataExtensionImpl, o
     override val org: Property<String> = objectFactory.property(String::class.java)
     override val repo: Property<String> = objectFactory.property(String::class.java)
 
-    override val url: Provider<String> = org.flatMap { org -> repo.map { repo -> "https://github.com/$org/$repo" } }
+    override val url: Provider<String> = mergeProviders(org, repo) { org, repo -> "https://github.com/$org/$repo" }
 
     override val vcsUrl: Provider<String> = url.map { url -> "$url.git" }
 
     override val issuesUrl: Provider<String> = url.map { url -> "$url/issues" }
 
-    override val pagesUrl: Provider<String> =
-        org.flatMap { org -> repo.map { repo -> "https://$org.github.io/$repo/" } }
+    override val pagesUrl: Provider<String> = mergeProviders(org, repo) { org, repo -> "https://$org.github.io/$repo/" }
 
     override fun issues() {
         metadataExtension.issueManagement { issueManagement ->
