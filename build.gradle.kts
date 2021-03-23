@@ -27,10 +27,10 @@ dependencies {
 gradlePlugin {
     plugins {
         create("metadata") {
-            id = "${group}.${name}"
+            id = "$group.$name"
             displayName = "Metadata for gradle projects"
             description = project.description
-            implementationClass = "${group}.metadata.MetadataPlugin"
+            implementationClass = "$group.metadata.MetadataPlugin"
         }
     }
 }
