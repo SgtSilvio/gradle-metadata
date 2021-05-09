@@ -1,20 +1,11 @@
 plugins {
-    kotlin("jvm")
-    id("java-gradle-plugin")
+    `kotlin-dsl`
+    `java-gradle-plugin`
     id("com.gradle.plugin-publish")
 }
 
 group = "com.github.sgtsilvio.gradle"
 description = "Gradle plugin to ease defining project metadata (urls, license, scm)"
-
-tasks {
-    compileKotlin {
-        kotlinOptions.jvmTarget = "1.8"
-    }
-    compileTestKotlin {
-        kotlinOptions.jvmTarget = "1.8"
-    }
-}
 
 repositories {
     mavenCentral()

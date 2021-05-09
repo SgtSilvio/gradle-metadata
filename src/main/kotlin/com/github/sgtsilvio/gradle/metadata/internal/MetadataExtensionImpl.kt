@@ -3,7 +3,7 @@ package com.github.sgtsilvio.gradle.metadata.internal
 import com.github.sgtsilvio.gradle.metadata.*
 import org.gradle.api.Action
 import org.gradle.api.model.ObjectFactory
-import org.gradle.api.provider.Property
+import org.gradle.kotlin.dsl.property
 import java.util.*
 
 /**
@@ -11,10 +11,10 @@ import java.util.*
  */
 open class MetadataExtensionImpl(private val objectFactory: ObjectFactory) : MetadataExtension {
 
-    override val moduleName: Property<String> = objectFactory.property(String::class.java)
-    override val readableName: Property<String> = objectFactory.property(String::class.java)
-    override val url: Property<String> = objectFactory.property(String::class.java)
-    override val docUrl: Property<String> = objectFactory.property(String::class.java)
+    override val moduleName = objectFactory.property<String>()
+    override val readableName = objectFactory.property<String>()
+    override val url = objectFactory.property<String>()
+    override val docUrl = objectFactory.property<String>()
 
     override var organization: OrganizationMetadataImpl? = null
     private val organizationListeners: MutableList<(OrganizationMetadataImpl) -> Unit> = LinkedList()
@@ -36,10 +36,10 @@ open class MetadataExtensionImpl(private val objectFactory: ObjectFactory) : Met
     init {
         withGithub { github ->
             url.convention(github.url)
-            scm { scm ->
-                scm.url.convention(github.vcsUrl)
-                scm.connection.convention(github.vcsUrl.map { url -> "scm:git:$url" })
-                scm.developerConnection.convention(github.vcsUrl.map { url -> "scm:git:$url" })
+            scm {
+                url.convention(github.vcsUrl)
+                connection.convention(github.vcsUrl.map { url -> "scm:git:$url" })
+                developerConnection.convention(github.vcsUrl.map { url -> "scm:git:$url" })
             }
         }
     }

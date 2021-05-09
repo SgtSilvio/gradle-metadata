@@ -2,12 +2,12 @@ package com.github.sgtsilvio.gradle.metadata.internal
 
 import com.github.sgtsilvio.gradle.metadata.OrganizationMetadata
 import org.gradle.api.model.ObjectFactory
-import org.gradle.api.provider.Property
+import org.gradle.kotlin.dsl.property
 
 /**
  * @author Silvio Giebl
  */
 class OrganizationMetadataImpl(objectFactory: ObjectFactory) : OrganizationMetadata {
-    override val name: Property<String> = objectFactory.property(String::class.java)
-    override val url: Property<String> = objectFactory.property(String::class.java)
+    override val name = objectFactory.property<String>()
+    override val url = objectFactory.property<String>()
 }
