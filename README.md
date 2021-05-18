@@ -12,12 +12,12 @@ Gradle plugin to ease defining project metadata:
 - issue management
 - github
 
-## Integration with other plugins
+## Integration with Other Plugins
 
 - `maven-publish`: automatically configures pom metadata
 - `biz.aQute.bnd.builder`: automatically configures meta-inf metadata
 
-## Example
+## How to Use
 
 ```kotlin
 plugins {
