@@ -1,9 +1,26 @@
 package com.github.sgtsilvio.gradle.metadata.internal
 
 import org.gradle.api.provider.Provider
+import org.gradle.util.GradleVersion
 
-fun <T1, T2, R> mergeProviders(p1: Provider<T1>, p2: Provider<T2>, merger: (T1, T2) -> R): Provider<R> =
-    p1.flatMap { t1 -> p2.map { t2 -> merger.invoke(t1, t2) } }
+fun <A : Any, B : Any, R : Any> Provider<A>.merge(bProvider: Provider<B>, merger: (A, B) -> R): Provider<R> {
+    return if (supportsZip()) {
+        zip(bProvider, merger)
+    } else {
+        map { a -> merger.invoke(a, bProvider.get()) }
+    }
+}
 
-fun <T1, T2, T3, R> mergeProviders(p1: Provider<T1>, p2: Provider<T2>, p3: Provider<T3>, merger: (T1, T2, T3) -> R):
-        Provider<R> = p1.flatMap { t1 -> mergeProviders(p2, p3) { t2, t3 -> merger.invoke(t1, t2, t3) } }
+fun <A : Any, B : Any, C : Any, R : Any> Provider<A>.merge(
+    bProvider: Provider<B>,
+    cProvider: Provider<C>,
+    merger: (A, B, C) -> R
+): Provider<R> {
+    return if (supportsZip()) {
+        zip(bProvider) { a, b -> Pair(a, b) }.zip(cProvider) { ab, c -> merger.invoke(ab.first, ab.second, c) }
+    } else {
+        map { a -> merger.invoke(a, bProvider.get(), cProvider.get()) }
+    }
+}
+
+private fun supportsZip() = GradleVersion.current() >= GradleVersion.version("6.6")

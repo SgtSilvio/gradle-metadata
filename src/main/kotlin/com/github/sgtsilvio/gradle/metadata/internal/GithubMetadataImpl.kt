@@ -7,19 +7,17 @@ import org.gradle.kotlin.dsl.property
 /**
  * @author Silvio Giebl
  */
-class GithubMetadataImpl(private val metadataExtension: MetadataExtensionImpl, objectFactory: ObjectFactory) :
-    GithubMetadata {
+class GithubMetadataImpl(
+    private val metadataExtension: MetadataExtensionImpl,
+    objectFactory: ObjectFactory
+) : GithubMetadata {
 
     override val org = objectFactory.property<String>()
     override val repo = objectFactory.property<String>()
-
-    override val url = mergeProviders(org, repo) { org, repo -> "https://github.com/$org/$repo" }
-
+    override val url = org.merge(repo) { org, repo -> "https://github.com/$org/$repo" }
     override val vcsUrl = url.map { url -> "$url.git" }
-
     override val issuesUrl = url.map { url -> "$url/issues" }
-
-    override val pagesUrl = mergeProviders(org, repo) { org, repo -> "https://$org.github.io/$repo/" }
+    override val pagesUrl = org.merge(repo) { org, repo -> "https://$org.github.io/$repo/" }
 
     override fun issues() {
         metadataExtension.issueManagement {

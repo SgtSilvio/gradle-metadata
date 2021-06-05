@@ -2,7 +2,7 @@ package com.github.sgtsilvio.gradle.metadata
 
 import aQute.bnd.gradle.BundleTaskConvention
 import com.github.sgtsilvio.gradle.metadata.internal.MetadataExtensionImpl
-import com.github.sgtsilvio.gradle.metadata.internal.mergeProviders
+import com.github.sgtsilvio.gradle.metadata.internal.merge
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
@@ -90,21 +90,13 @@ class MetadataPlugin : Plugin<Project> {
                     bnd(organization.name.map { name -> "Bundle-Vendor=$name}" })
                 }
                 metadata.withLicense { license ->
-                    bnd(mergeProviders(
-                        license.shortName,
-                        license.readableName,
-                        license.url
-                    ) { shortName, readableName, url ->
+                    bnd(license.shortName.merge(license.readableName, license.url) { shortName, readableName, url ->
                         "Bundle-License=$shortName;description=\"$readableName\";link=\"$url\""
                     })
                 }
                 bnd(metadata.docUrl.map { docUrl -> "Bundle-DocURL=$docUrl" })
                 metadata.withScm { scm ->
-                    bnd(mergeProviders(
-                        scm.url,
-                        scm.connection,
-                        scm.developerConnection
-                    ) { url, connection, devConnection ->
+                    bnd(scm.url.merge(scm.connection, scm.developerConnection) { url, connection, devConnection ->
                         "Bundle-SCM=url=\"$url\";connection=\"$connection\";developerConnection=\"$devConnection\""
                     })
                 }
