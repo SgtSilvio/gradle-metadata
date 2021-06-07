@@ -1,14 +1,11 @@
 package com.github.sgtsilvio.gradle.metadata.internal
 
 import com.github.sgtsilvio.gradle.metadata.DeveloperMetadata
-import org.gradle.api.model.ObjectFactory
-import org.gradle.kotlin.dsl.property
+import javax.inject.Inject
 
 /**
  * @author Silvio Giebl
  */
-class DeveloperMetadataImpl(objectFactory: ObjectFactory) : DeveloperMetadata {
-    override val id = objectFactory.property<String>()
-    override val name = objectFactory.property<String>()
-    override val email = objectFactory.property<String>()
+abstract class DeveloperMetadataImpl @Inject constructor(private val name: String) : DeveloperMetadata {
+    final override fun getName() = name
 }

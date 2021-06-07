@@ -10,9 +10,5 @@ interface LicenseMetadata {
     val readableName: Property<String>
     val url: Property<String>
 
-    fun apache2() {
-        shortName.set("Apache-2.0")
-        readableName.set("Apache License, Version 2.0")
-        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-    }
+    fun apache2()
 }

@@ -3,30 +3,31 @@ package com.github.sgtsilvio.gradle.metadata.internal
 import com.github.sgtsilvio.gradle.metadata.GithubMetadata
 import org.gradle.api.model.ObjectFactory
 import org.gradle.kotlin.dsl.property
+import javax.inject.Inject
 
 /**
  * @author Silvio Giebl
  */
-class GithubMetadataImpl(
-    private val metadataExtension: MetadataExtensionImpl,
+abstract class GithubMetadataImpl @Inject constructor(
+    private val metadata: MetadataExtensionImpl,
     objectFactory: ObjectFactory
 ) : GithubMetadata {
 
-    override val org = objectFactory.property<String>()
-    override val repo = objectFactory.property<String>()
-    override val url = org.merge(repo) { org, repo -> "https://github.com/$org/$repo" }
-    override val vcsUrl = url.map { url -> "$url.git" }
-    override val issuesUrl = url.map { url -> "$url/issues" }
-    override val pagesUrl = org.merge(repo) { org, repo -> "https://$org.github.io/$repo/" }
+    final override val org = objectFactory.property<String>()
+    final override val repo = objectFactory.property<String>()
+    final override val url = org.merge(repo) { org, repo -> "https://github.com/$org/$repo" }
+    final override val vcsUrl = url.map { url -> "$url.git" }
+    final override val issuesUrl = url.map { url -> "$url/issues" }
+    final override val pagesUrl = org.merge(repo) { org, repo -> "https://$org.github.io/$repo/" }
 
     override fun issues() {
-        metadataExtension.issueManagement {
+        metadata.issueManagement {
             system.set("GitHub Issues")
             url.set(issuesUrl)
         }
     }
 
     override fun pages() {
-        metadataExtension.docUrl.set(pagesUrl)
+        metadata.docUrl.set(pagesUrl)
     }
 }

@@ -35,9 +35,8 @@ metadata {
         url.set("https://www.testorg.example/")
     }
     developers {
-        developer {
-            id.set("jdoe")
-            name.set("John Doe")
+        register("jdoe") {
+            fullName.set("John Doe")
             email.set("john@doe.example")
         }
     }
@@ -49,3 +48,7 @@ metadata {
     }
 }
 ```
+
+## Requirements
+
+- Gradle 6.0 or higher

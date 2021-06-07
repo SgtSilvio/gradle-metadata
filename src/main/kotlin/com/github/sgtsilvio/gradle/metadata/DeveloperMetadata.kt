@@ -1,12 +1,12 @@
 package com.github.sgtsilvio.gradle.metadata
 
+import org.gradle.api.Named
 import org.gradle.api.provider.Property
 
 /**
  * @author Silvio Giebl
  */
-interface DeveloperMetadata {
-    val id: Property<String>
-    val name: Property<String>
+interface DeveloperMetadata : Named {
+    val fullName: Property<String>
     val email: Property<String>
 }

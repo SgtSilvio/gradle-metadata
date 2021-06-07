@@ -39,40 +39,40 @@ class MetadataPlugin : Plugin<Project> {
                 name.convention(metadata.readableName)
                 description.convention(project.provider { project.description })
                 url.convention(metadata.url)
-                metadata.withOrganization { organization ->
+                metadata.organization.whenPresent {
                     organization {
-                        name.convention(organization.name)
-                        url.convention(organization.url)
+                        name.convention(this@whenPresent.name)
+                        url.convention(this@whenPresent.url)
                     }
                 }
                 licenses {
-                    metadata.withLicense { license ->
+                    metadata.license.whenPresent {
                         license {
-                            name.set(license.readableName)
-                            url.set(license.url)
+                            name.set(this@whenPresent.readableName)
+                            url.set(this@whenPresent.url)
                         }
                     }
                 }
                 developers {
-                    metadata.developers.withDeveloper { developer ->
+                    metadata.developers.all {
                         developer {
-                            id.set(developer.id)
-                            name.set(developer.name)
-                            email.set(developer.email)
+                            id.set(this@all.name)
+                            name.set(this@all.fullName)
+                            email.set(this@all.email)
                         }
                     }
                 }
-                metadata.withScm { scm ->
+                metadata.scm.whenPresent {
                     scm {
-                        connection.convention(scm.connection)
-                        developerConnection.convention(scm.developerConnection)
-                        url.convention(scm.url)
+                        connection.convention(this@whenPresent.connection)
+                        developerConnection.convention(this@whenPresent.developerConnection)
+                        url.convention(this@whenPresent.url)
                     }
                 }
-                metadata.withIssueManagement { issueManagement ->
+                metadata.issueManagement.whenPresent {
                     issueManagement {
-                        system.convention(issueManagement.system)
-                        url.convention(issueManagement.url)
+                        system.convention(this@whenPresent.system)
+                        url.convention(this@whenPresent.url)
                     }
                 }
             }
@@ -86,17 +86,15 @@ class MetadataPlugin : Plugin<Project> {
                 bnd(project.provider { "Bundle-Description=${project.description}" })
                 bnd(metadata.moduleName.map { moduleName -> "Automatic-Module-Name=$moduleName" })
                 bnd(metadata.moduleName.map { moduleName -> "Bundle-SymbolicName=$moduleName" })
-                metadata.withOrganization { organization ->
-                    bnd(organization.name.map { name -> "Bundle-Vendor=$name}" })
-                }
-                metadata.withLicense { license ->
-                    bnd(license.shortName.merge(license.readableName, license.url) { shortName, readableName, url ->
+                metadata.organization.whenPresent { bnd(name.map { name -> "Bundle-Vendor=$name}" }) }
+                metadata.license.whenPresent {
+                    bnd(shortName.merge(readableName, url) { shortName, readableName, url ->
                         "Bundle-License=$shortName;description=\"$readableName\";link=\"$url\""
                     })
                 }
                 bnd(metadata.docUrl.map { docUrl -> "Bundle-DocURL=$docUrl" })
-                metadata.withScm { scm ->
-                    bnd(scm.url.merge(scm.connection, scm.developerConnection) { url, connection, devConnection ->
+                metadata.scm.whenPresent {
+                    bnd(url.merge(connection, developerConnection) { url, connection, devConnection ->
                         "Bundle-SCM=url=\"$url\";connection=\"$connection\";developerConnection=\"$devConnection\""
                     })
                 }

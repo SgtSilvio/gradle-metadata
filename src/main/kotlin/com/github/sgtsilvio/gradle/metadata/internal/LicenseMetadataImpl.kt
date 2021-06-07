@@ -1,14 +1,14 @@
 package com.github.sgtsilvio.gradle.metadata.internal
 
 import com.github.sgtsilvio.gradle.metadata.LicenseMetadata
-import org.gradle.api.model.ObjectFactory
-import org.gradle.kotlin.dsl.property
 
 /**
  * @author Silvio Giebl
  */
-class LicenseMetadataImpl(objectFactory: ObjectFactory) : LicenseMetadata {
-    override val shortName = objectFactory.property<String>()
-    override val readableName = objectFactory.property<String>()
-    override val url = objectFactory.property<String>()
+abstract class LicenseMetadataImpl : LicenseMetadata {
+    override fun apache2() {
+        shortName.set("Apache-2.0")
+        readableName.set("Apache License, Version 2.0")
+        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+    }
 }

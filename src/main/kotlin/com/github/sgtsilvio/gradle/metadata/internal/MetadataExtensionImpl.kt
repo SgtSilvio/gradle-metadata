@@ -3,128 +3,65 @@ package com.github.sgtsilvio.gradle.metadata.internal
 import com.github.sgtsilvio.gradle.metadata.*
 import org.gradle.api.Action
 import org.gradle.api.model.ObjectFactory
+import org.gradle.api.provider.ProviderFactory
+import org.gradle.kotlin.dsl.domainObjectContainer
+import org.gradle.kotlin.dsl.newInstance
 import org.gradle.kotlin.dsl.property
-import java.util.*
+import javax.inject.Inject
 
 /**
  * @author Silvio Giebl
  */
-open class MetadataExtensionImpl(private val objectFactory: ObjectFactory) : MetadataExtension {
+abstract class MetadataExtensionImpl @Inject constructor(
+    objectFactory: ObjectFactory,
+    providerFactory: ProviderFactory
+) : MetadataExtension {
 
-    override val moduleName = objectFactory.property<String>()
-    override val readableName = objectFactory.property<String>()
-    override val url = objectFactory.property<String>()
-    override val docUrl = objectFactory.property<String>()
+    final override val moduleName = objectFactory.property<String>()
+    final override val readableName = objectFactory.property<String>()
+    final override val url = objectFactory.property<String>()
+    final override val docUrl = objectFactory.property<String>()
 
-    override var organization: OrganizationMetadataImpl? = null
-    private val organizationListeners: MutableList<(OrganizationMetadataImpl) -> Unit> = LinkedList()
+    final override val organization = InitProviderImpl(providerFactory) {
+        objectFactory.newInstance(OrganizationMetadata::class)
+    }
 
-    override var license: LicenseMetadataImpl? = null
-    private val licenseListeners: MutableList<(LicenseMetadataImpl) -> Unit> = LinkedList()
+    final override val license: InitProviderImpl<LicenseMetadata> = InitProviderImpl(providerFactory) {
+        objectFactory.newInstance(LicenseMetadataImpl::class)
+    }
 
-    override val developers: DevelopersMetadataImpl = DevelopersMetadataImpl(objectFactory)
+    final override val developers = objectFactory.domainObjectContainer(DeveloperMetadata::class) { name ->
+        objectFactory.newInstance(DeveloperMetadataImpl::class, name)
+    }
 
-    override var scm: ScmMetadataImpl? = null
-    private val scmListeners: MutableList<(ScmMetadataImpl) -> Unit> = LinkedList()
+    final override val scm = InitProviderImpl(providerFactory) {
+        objectFactory.newInstance(ScmMetadata::class).apply {
+            url.convention(github.provider.flatMap { it.vcsUrl })
+            connection.convention(github.provider.flatMap { it.vcsUrl.map { url -> "scm:git:$url" } })
+            developerConnection.convention(github.provider.flatMap { it.vcsUrl.map { url -> "scm:git:$url" } })
+        }
+    }
 
-    override var issueManagement: IssueManagementMetadataImpl? = null
-    private val issueManagementListeners: MutableList<(IssueManagementMetadataImpl) -> Unit> = LinkedList()
+    final override val issueManagement = InitProviderImpl(providerFactory) {
+        objectFactory.newInstance(IssueManagementMetadata::class)
+    }
 
-    override var github: GithubMetadataImpl? = null
-    private val githubListeners: MutableList<(GithubMetadataImpl) -> Unit> = LinkedList()
+    final override val github: InitProviderImpl<GithubMetadata> = InitProviderImpl(providerFactory) {
+        objectFactory.newInstance(GithubMetadataImpl::class, this)
+    }
 
     init {
-        withGithub { github ->
-            url.convention(github.url)
-            scm {
-                url.convention(github.vcsUrl)
-                connection.convention(github.vcsUrl.map { url -> "scm:git:$url" })
-                developerConnection.convention(github.vcsUrl.map { url -> "scm:git:$url" })
-            }
-        }
+        url.convention(github.provider.flatMap { it.url })
+        github.whenPresent { scm.configure {} }
     }
 
-    override fun organization(action: Action<in OrganizationMetadata>) {
-        createIfAbsentAndExecuteAction(organization, organizationListeners, action) {
-            OrganizationMetadataImpl(objectFactory).also { organization = it }
-        }
-    }
+    override fun organization(action: Action<in OrganizationMetadata>) = organization.configure(action)
 
-    fun withOrganization(listener: (OrganizationMetadataImpl) -> Unit) {
-        invokeIfElementIsPresentOrAddToListeners(listener, organization, organizationListeners)
-    }
+    override fun license(action: Action<in LicenseMetadata>) = license.configure(action)
 
-    override fun license(action: Action<in LicenseMetadata>) {
-        createIfAbsentAndExecuteAction(license, licenseListeners, action) {
-            LicenseMetadataImpl(objectFactory).also { license = it }
-        }
-    }
+    override fun scm(action: Action<in ScmMetadata>) = scm.configure(action)
 
-    fun withLicense(listener: (LicenseMetadataImpl) -> Unit) {
-        invokeIfElementIsPresentOrAddToListeners(listener, license, licenseListeners)
-    }
+    override fun issueManagement(action: Action<in IssueManagementMetadata>) = issueManagement.configure(action)
 
-    override fun developers(action: Action<in DevelopersMetadata>) {
-        action.execute(developers)
-    }
-
-    override fun scm(action: Action<in ScmMetadata>) {
-        createIfAbsentAndExecuteAction(scm, scmListeners, action) {
-            ScmMetadataImpl(objectFactory).also { scm = it }
-        }
-    }
-
-    fun withScm(listener: (ScmMetadataImpl) -> Unit) {
-        invokeIfElementIsPresentOrAddToListeners(listener, scm, scmListeners)
-    }
-
-    override fun issueManagement(action: Action<in IssueManagementMetadata>) {
-        createIfAbsentAndExecuteAction(issueManagement, issueManagementListeners, action) {
-            IssueManagementMetadataImpl(objectFactory).also { issueManagement = it }
-        }
-    }
-
-    fun withIssueManagement(listener: (IssueManagementMetadataImpl) -> Unit) {
-        invokeIfElementIsPresentOrAddToListeners(listener, issueManagement, issueManagementListeners)
-    }
-
-    override fun github(action: Action<in GithubMetadata>) {
-        createIfAbsentAndExecuteAction(github, githubListeners, action) {
-            GithubMetadataImpl(this, objectFactory).also { github = it }
-        }
-    }
-
-    fun withGithub(listener: (GithubMetadataImpl) -> Unit) {
-        invokeIfElementIsPresentOrAddToListeners(listener, github, githubListeners)
-    }
-
-    private inline fun <T> createIfAbsentAndExecuteAction(
-        element: T?,
-        listeners: MutableList<(T) -> Unit>,
-        action: Action<in T>,
-        creator: () -> T
-    ) {
-        if (element == null) {
-            val newElement = creator.invoke()
-            action.execute(newElement)
-            for (listener in listeners) {
-                listener.invoke(newElement)
-            }
-            listeners.clear()
-        } else {
-            action.execute(element)
-        }
-    }
-
-    private fun <T> invokeIfElementIsPresentOrAddToListeners(
-        listener: (T) -> Unit,
-        element: T?,
-        listeners: MutableList<(T) -> Unit>
-    ) {
-        if (element == null) {
-            listeners.add(listener)
-        } else {
-            listener.invoke(element)
-        }
-    }
+    override fun github(action: Action<in GithubMetadata>) = github.configure(action)
 }
