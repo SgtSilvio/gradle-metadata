@@ -34,7 +34,7 @@ class MetadataPlugin : Plugin<Project> {
     }
 
     private fun setPomMetadata(project: Project, metadata: MetadataExtensionImpl) {
-        project.the<PublishingExtension>().publications.withType<MavenPublication> {
+        project.the<PublishingExtension>().publications.withType<MavenPublication>().configureEach {
             pom {
                 name.convention(metadata.readableName)
                 description.convention(project.provider { project.description })
