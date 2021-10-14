@@ -18,10 +18,14 @@ import org.gradle.kotlin.dsl.withType
  */
 class MetadataPlugin : Plugin<Project> {
 
+    companion object {
+        const val EXTENSION_NAME = "metadata"
+    }
+
     override fun apply(project: Project) {
         val metadata = project.extensions.create(
             MetadataExtension::class,
-            "metadata",
+            EXTENSION_NAME,
             MetadataExtensionImpl::class
         ) as MetadataExtensionImpl
 
