@@ -29,7 +29,7 @@ class MetadataPlugin : Plugin<Project> {
             MetadataExtensionImpl::class
         ) as MetadataExtensionImpl
 
-        project.plugins.withId("maven-publish") {
+        project.plugins.withId("org.gradle.maven-publish") {
             setPomMetadata(project, metadata)
         }
         project.plugins.withId("biz.aQute.bnd.builder") {
