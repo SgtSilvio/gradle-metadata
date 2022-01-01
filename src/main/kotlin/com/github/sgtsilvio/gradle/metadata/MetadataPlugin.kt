@@ -1,6 +1,6 @@
 package com.github.sgtsilvio.gradle.metadata
 
-import aQute.bnd.gradle.BundleTaskConvention
+import aQute.bnd.gradle.BundleTaskExtension
 import com.github.sgtsilvio.gradle.metadata.internal.MetadataExtensionImpl
 import com.github.sgtsilvio.gradle.metadata.internal.merge
 import org.gradle.api.Plugin
@@ -8,9 +8,9 @@ import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.the
-import org.gradle.kotlin.dsl.withConvention
 import org.gradle.kotlin.dsl.withType
 
 /**
@@ -85,7 +85,7 @@ class MetadataPlugin : Plugin<Project> {
 
     private fun setBndMetadata(project: Project, metadata: MetadataExtensionImpl) {
         project.tasks.named(JavaPlugin.JAR_TASK_NAME) {
-            withConvention(BundleTaskConvention::class) {
+            configure<BundleTaskExtension> {
                 bnd("Bundle-Name=${project.name}")
                 bnd(project.provider { "Bundle-Description=${project.description}" })
                 bnd(metadata.moduleName.map { moduleName -> "Automatic-Module-Name=$moduleName" })
