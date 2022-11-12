@@ -26,8 +26,8 @@ abstract class MetadataExtensionImpl @Inject constructor(
         objectFactory.newInstance(OrganizationMetadata::class)
     }
 
-    final override val license: InitProviderImpl<LicenseMetadata> = InitProviderImpl(providerFactory) {
-        objectFactory.newInstance(LicenseMetadataImpl::class)
+    final override val license = InitProviderImpl(providerFactory) {
+        objectFactory.newInstance(LicenseMetadata::class)
     }
 
     final override val developers = objectFactory.domainObjectContainer(DeveloperMetadata::class) { name ->
