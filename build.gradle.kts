@@ -56,3 +56,9 @@ pluginBundle {
     vcsUrl = metadata.scm.get().url.get()
     tags = listOf("metadata", "pom", "meta-inf")
 }
+
+testing {
+    suites.named<JvmTestSuite>("test") {
+        useJUnitJupiter(libs.versions.junit.jupiter.get())
+    }
+}
