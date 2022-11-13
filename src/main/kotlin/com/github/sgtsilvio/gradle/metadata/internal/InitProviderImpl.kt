@@ -21,14 +21,12 @@ class InitProviderImpl<T : Any>(providerFactory: ProviderFactory, valueFactory: 
             value = valueFactory!!.invoke()
             this.value = value
             valueFactory = null
-            configuration.execute(value)
             for (listener in listeners) {
                 listener.execute(value)
             }
             listeners.clear()
-        } else {
-            configuration.execute(value)
         }
+        configuration.execute(value)
     }
 
     override fun whenPresent(listener: Action<in T>) {
