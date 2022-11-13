@@ -35,11 +35,7 @@ abstract class MetadataExtensionImpl @Inject constructor(
     }
 
     final override val scm = InitProviderImpl(providerFactory) {
-        objectFactory.newInstance(ScmMetadata::class).apply {
-            url.convention(github.provider.flatMap { it.vcsUrl })
-            connection.convention(github.provider.flatMap { it.vcsUrl.map { url -> "scm:git:$url" } })
-            developerConnection.convention(github.provider.flatMap { it.vcsUrl.map { url -> "scm:git:$url" } })
-        }
+        objectFactory.newInstance(ScmMetadata::class)
     }
 
     final override val issueManagement = InitProviderImpl(providerFactory) {
@@ -52,6 +48,16 @@ abstract class MetadataExtensionImpl @Inject constructor(
 
     init {
         url.convention(github.provider.flatMap { it.url })
+        docUrl.convention(github.provider.flatMap { it.pagesUrl })
+        scm.whenPresent {
+            url.convention(github.provider.flatMap { it.vcsUrl })
+            connection.convention(github.provider.flatMap { it.vcsUrl.map { url -> "scm:git:$url" } })
+            developerConnection.convention(github.provider.flatMap { it.vcsUrl.map { url -> "scm:git:$url" } })
+        }
+        issueManagement.whenPresent {
+            system.convention(github.provider.flatMap { it.issuesUrl.map { "GitHub Issues" } })
+            url.convention(github.provider.flatMap { it.issuesUrl })
+        }
         github.whenPresent { scm.configure {} }
     }
 

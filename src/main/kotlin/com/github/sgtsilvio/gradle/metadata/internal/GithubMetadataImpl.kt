@@ -17,17 +17,15 @@ abstract class GithubMetadataImpl @Inject constructor(
     final override val repo = objectFactory.property<String>()
     final override val url = org.merge(repo) { org, repo -> "https://github.com/$org/$repo" }
     final override val vcsUrl = url.map { url -> "$url.git" }
-    final override val issuesUrl = url.map { url -> "$url/issues" }
-    final override val pagesUrl = org.merge(repo) { org, repo -> "https://$org.github.io/$repo/" }
+    final override val issuesUrl = objectFactory.property<String>()
+    final override val pagesUrl = objectFactory.property<String>()
 
     override fun issues() {
-        metadata.issueManagement {
-            system.set("GitHub Issues")
-            url.set(issuesUrl)
-        }
+        issuesUrl.set(url.map { url -> "$url/issues" })
+        metadata.issueManagement.configure {}
     }
 
     override fun pages() {
-        metadata.docUrl.set(pagesUrl)
+        pagesUrl.set(org.merge(repo) { org, repo -> "https://$org.github.io/$repo/" })
     }
 }
