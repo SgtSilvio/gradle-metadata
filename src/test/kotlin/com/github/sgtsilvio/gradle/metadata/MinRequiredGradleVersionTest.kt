@@ -27,6 +27,7 @@ class MinRequiredGradleVersionTest {
             }
             group = "com.example"
             version = "1.2.3"
+            description = "Test is a generic library provided by Example Org"
             metadata {
                 moduleName.set("com.example.test")
                 readableName.set("Test")
@@ -51,15 +52,7 @@ class MinRequiredGradleVersionTest {
                     issues()
                 }
             }
-            repositories {
-                mavenCentral()
-            }
-            publishing {
-                publications {
-                    register<MavenPublication>("maven") {
-                    }
-                }
-            }
+            publishing.publications.register<MavenPublication>("maven")
             """.trimIndent()
         )
 
@@ -82,6 +75,7 @@ class MinRequiredGradleVersionTest {
               <version>1.2.3</version>
               <packaging>pom</packaging>
               <name>Test</name>
+              <description>Test is a generic library provided by Example Org</description>
               <url>www.example.com/test</url>
               <organization>
                 <name>Example Org</name>
@@ -110,9 +104,8 @@ class MinRequiredGradleVersionTest {
                 <url>https://github.com/example/test/issues</url>
               </issueManagement>
             </project>
-            
             """.trimIndent(),
-            projectDir.resolve("build/publications/maven/pom-default.xml").readText()
+            projectDir.resolve("build/publications/maven/pom-default.xml").readText().trim()
         )
     }
 }
