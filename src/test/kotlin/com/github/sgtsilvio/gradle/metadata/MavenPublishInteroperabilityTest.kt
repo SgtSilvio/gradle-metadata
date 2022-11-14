@@ -390,10 +390,7 @@ class MavenPublishInteroperabilityTest {
         test(
             """
             metadata {
-                github {
-                    org.set("example")
-                    repo.set("test")
-                }
+                github {}
             }
             """.trimIndent(),
             """
@@ -408,15 +405,34 @@ class MavenPublishInteroperabilityTest {
     }
 
     @Test
+    fun whenOnlyGitHubOrgAndRepoSet_thenOnlyUrlAndScmInPom() {
+        test(
+            """
+            metadata {
+                github {
+                    org.set("example-custom")
+                    repo.set("test-custom")
+                }
+            }
+            """.trimIndent(),
+            """
+            <url>https://github.com/example-custom/test-custom</url>
+            <scm>
+              <connection>scm:git:https://github.com/example-custom/test-custom.git</connection>
+              <developerConnection>scm:git:https://github.com/example-custom/test-custom.git</developerConnection>
+              <url>https://github.com/example-custom/test-custom.git</url>
+            </scm>
+            """.trimIndent(),
+        )
+    }
+
+    @Test
     fun whenGitHubAndUrlSet_thenUrlTakesPrecedenceOverGitHubInPom() {
         test(
             """
             metadata {
                 url.set("www.example.com/test")
-                github {
-                    org.set("example")
-                    repo.set("test")
-                }
+                github {}
             }
             """.trimIndent(),
             """
@@ -440,10 +456,7 @@ class MavenPublishInteroperabilityTest {
                     connection.set("scm:git:https://github-custom.com/example/test.git")
                     developerConnection.set("scm:git:https://github-custom.com/example/test.git")
                 }
-                github {
-                    org.set("example")
-                    repo.set("test")
-                }
+                github {}
             }
             """.trimIndent(),
             """
@@ -463,8 +476,6 @@ class MavenPublishInteroperabilityTest {
             """
             metadata {
                 github {
-                    org.set("example")
-                    repo.set("test")
                     issues()
                 }
             }
@@ -494,8 +505,6 @@ class MavenPublishInteroperabilityTest {
                     url.set("https://github-custom.com/example/test/issues")
                 }
                 github {
-                    org.set("example")
-                    repo.set("test")
                     issues()
                 }
             }
@@ -537,8 +546,6 @@ class MavenPublishInteroperabilityTest {
                     }
                 }
                 github {
-                    org.set("example")
-                    repo.set("test")
                     issues()
                 }
             }

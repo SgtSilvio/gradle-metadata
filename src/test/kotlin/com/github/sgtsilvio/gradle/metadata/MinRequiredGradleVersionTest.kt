@@ -47,8 +47,6 @@ class MinRequiredGradleVersionTest {
                     }
                 }
                 github {
-                    org.set("example")
-                    repo.set("test")
                     issues()
                 }
             }
