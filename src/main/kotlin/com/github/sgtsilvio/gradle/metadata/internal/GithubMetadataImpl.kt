@@ -9,7 +9,7 @@ import javax.inject.Inject
 /**
  * @author Silvio Giebl
  */
-abstract class GithubMetadataImpl @Inject constructor(objectFactory: ObjectFactory) : GithubMetadata {
+internal abstract class GithubMetadataImpl @Inject constructor(objectFactory: ObjectFactory) : GithubMetadata {
 
     final override val org = objectFactory.property<String>()
     final override val repo = objectFactory.property<String>()

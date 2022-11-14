@@ -9,7 +9,7 @@ import org.gradle.api.provider.Provider
 /**
  * @author Silvio Giebl
  */
-class InitProviderImpl<T : Any> private constructor(
+internal class InitProviderImpl<T : Any> private constructor(
     objectFactory: ObjectFactory,
     valueType: Class<T>,
     initializer: (Property<T>) -> Unit,

@@ -3,7 +3,7 @@ package com.github.sgtsilvio.gradle.metadata.internal
 import org.gradle.api.provider.Provider
 import org.gradle.util.GradleVersion
 
-fun <A : Any, B : Any, R : Any> Provider<A>.merge(bProvider: Provider<B>, merger: (A, B) -> R): Provider<R> {
+internal fun <A : Any, B : Any, R : Any> Provider<A>.merge(bProvider: Provider<B>, merger: (A, B) -> R): Provider<R> {
     return if (supportsZip()) {
         zip(bProvider, merger)
     } else {
@@ -11,7 +11,7 @@ fun <A : Any, B : Any, R : Any> Provider<A>.merge(bProvider: Provider<B>, merger
     }
 }
 
-fun <A : Any, B : Any, C : Any, R : Any> Provider<A>.merge(
+internal fun <A : Any, B : Any, C : Any, R : Any> Provider<A>.merge(
     bProvider: Provider<B>,
     cProvider: Provider<C>,
     merger: (A, B, C) -> R

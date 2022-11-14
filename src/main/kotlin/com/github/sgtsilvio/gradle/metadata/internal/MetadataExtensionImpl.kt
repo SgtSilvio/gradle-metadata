@@ -12,7 +12,7 @@ import javax.inject.Inject
 /**
  * @author Silvio Giebl
  */
-abstract class MetadataExtensionImpl @Inject constructor(objectFactory: ObjectFactory) : MetadataExtension {
+internal abstract class MetadataExtensionImpl @Inject constructor(objectFactory: ObjectFactory) : MetadataExtension {
 
     final override val moduleName = objectFactory.property<String>()
     final override val readableName = objectFactory.property<String>()
