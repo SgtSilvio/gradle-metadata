@@ -105,7 +105,7 @@ class MinRequiredGradleVersionTest {
               </issueManagement>
             </project>
             """.trimIndent(),
-            projectDir.resolve("build/publications/maven/pom-default.xml").readText().trim()
+            projectDir.resolve("build/publications/maven/pom-default.xml").readText().trim(),
         )
     }
 }

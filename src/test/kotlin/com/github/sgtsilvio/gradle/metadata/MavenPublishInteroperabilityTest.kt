@@ -54,7 +54,7 @@ class MavenPublishInteroperabilityTest {
             |${expectedPomFileContent.prependIndent("  ")}
             |</project>
             """.trimMargin(),
-            projectDir.resolve("build/publications/maven/pom-default.xml").readText().trim()
+            projectDir.resolve("build/publications/maven/pom-default.xml").readText().trim(),
         )
     }
 
@@ -66,7 +66,7 @@ class MavenPublishInteroperabilityTest {
             """.trimIndent(),
             """
             <description>Test is a generic library provided by Example Org</description>
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -80,7 +80,7 @@ class MavenPublishInteroperabilityTest {
             """.trimIndent(),
             """
             <name>Test</name>
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -94,7 +94,7 @@ class MavenPublishInteroperabilityTest {
             """.trimIndent(),
             """
             <url>www.example.com/test</url>
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -112,7 +112,7 @@ class MavenPublishInteroperabilityTest {
             <organization>
               <name>Example Org</name>
             </organization>
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -130,7 +130,7 @@ class MavenPublishInteroperabilityTest {
             <organization>
               <url>www.example.com</url>
             </organization>
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -150,7 +150,7 @@ class MavenPublishInteroperabilityTest {
                 <name>Apache License, Version 2.0</name>
               </license>
             </licenses>
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -170,7 +170,7 @@ class MavenPublishInteroperabilityTest {
                 <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
               </license>
             </licenses>
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -191,7 +191,7 @@ class MavenPublishInteroperabilityTest {
                 <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
               </license>
             </licenses>
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -211,7 +211,7 @@ class MavenPublishInteroperabilityTest {
                 <id>jdoe</id>
               </developer>
             </developers>
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -234,7 +234,7 @@ class MavenPublishInteroperabilityTest {
                 <name>John Doe</name>
               </developer>
             </developers>
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -257,7 +257,7 @@ class MavenPublishInteroperabilityTest {
                 <email>john.doe@example.com</email>
               </developer>
             </developers>
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -291,7 +291,7 @@ class MavenPublishInteroperabilityTest {
                 <email>john.doe2@example.com</email>
               </developer>
             </developers>
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -309,7 +309,7 @@ class MavenPublishInteroperabilityTest {
             <scm>
               <url>https://github.com/example/test.git</url>
             </scm>
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -327,7 +327,7 @@ class MavenPublishInteroperabilityTest {
             <scm>
               <connection>scm:git:https://github.com/example/test.git</connection>
             </scm>
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -345,7 +345,7 @@ class MavenPublishInteroperabilityTest {
             <scm>
               <developerConnection>scm:git:https://github.com/example/test.git</developerConnection>
             </scm>
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -363,7 +363,7 @@ class MavenPublishInteroperabilityTest {
             <issueManagement>
               <system>GitHub Issues</system>
             </issueManagement>
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -381,7 +381,7 @@ class MavenPublishInteroperabilityTest {
             <issueManagement>
               <url>https://github.com/example/test/issues</url>
             </issueManagement>
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -403,7 +403,7 @@ class MavenPublishInteroperabilityTest {
               <developerConnection>scm:git:https://github.com/example/test.git</developerConnection>
               <url>https://github.com/example/test.git</url>
             </scm>
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -426,7 +426,7 @@ class MavenPublishInteroperabilityTest {
               <developerConnection>scm:git:https://github.com/example/test.git</developerConnection>
               <url>https://github.com/example/test.git</url>
             </scm>
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -453,7 +453,7 @@ class MavenPublishInteroperabilityTest {
               <developerConnection>scm:git:https://github-custom.com/example/test.git</developerConnection>
               <url>https://github-custom.com/example/test.git</url>
             </scm>
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -480,7 +480,7 @@ class MavenPublishInteroperabilityTest {
               <system>GitHub Issues</system>
               <url>https://github.com/example/test/issues</url>
             </issueManagement>
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -511,7 +511,7 @@ class MavenPublishInteroperabilityTest {
               <system>GitHub Custom Issues</system>
               <url>https://github-custom.com/example/test/issues</url>
             </issueManagement>
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -573,7 +573,7 @@ class MavenPublishInteroperabilityTest {
               <system>GitHub Issues</system>
               <url>https://github.com/example/test/issues</url>
             </issueManagement>
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 }
