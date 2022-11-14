@@ -58,6 +58,8 @@ internal abstract class MetadataExtensionImpl @Inject constructor(
         }
         github.whenPresent {
             this as GithubMetadataImpl
+            org.convention(providerFactory.provider { orgFromGroup(project.group.toString()) })
+            repo.convention(project.name)
             scm.initialize()
             issues.whenPresent {
                 issueManagement.initialize()
@@ -74,4 +76,13 @@ internal abstract class MetadataExtensionImpl @Inject constructor(
     override fun issueManagement(action: Action<in IssueManagementMetadata>) = issueManagement.configure(action)
 
     override fun github(action: Action<in GithubMetadata>) = github.configure(action)
+
+    private fun orgFromGroup(group: String): String {
+        val index = group.indexOf('.')
+        return if (index >= 0) {
+            group.substring(index + 1)
+        } else {
+            group
+        }
+    }
 }
