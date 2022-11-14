@@ -11,8 +11,8 @@ interface GithubMetadata {
     val repo: Property<String>
     val url: Provider<String>
     val vcsUrl: Provider<String>
-    val pagesUrl: Provider<String>
     val issuesUrl: Provider<String>
+    val pagesUrl: Provider<String>
 
     fun issues()
 
