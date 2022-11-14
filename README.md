@@ -1,6 +1,8 @@
 # Metadata for Gradle Projects
 
 [![Gradle Plugin Portal](https://img.shields.io/gradle-plugin-portal/v/com.github.sgtsilvio.gradle.metadata?color=brightgreen&style=for-the-badge)](https://plugins.gradle.org/plugin/com.github.sgtsilvio.gradle.metadata)
+[![GitHub](https://img.shields.io/github/license/sgtsilvio/gradle-metadata?color=brightgreen&style=for-the-badge)](LICENSE)
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/sgtsilvio/gradle-metadata/CI%20Check/master?style=for-the-badge)](https://github.com/SgtSilvio/gradle-metadata/actions/workflows/check.yml?query=branch%3Amaster)
 
 Gradle plugin to ease defining project metadata:
 - module name
