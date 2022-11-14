@@ -1,9 +1,9 @@
 package com.github.sgtsilvio.gradle.metadata.internal
 
 import com.github.sgtsilvio.gradle.metadata.*
+import com.github.sgtsilvio.gradle.metadata.internal.InitProviderImpl.Companion.initProvider
 import org.gradle.api.Action
 import org.gradle.api.model.ObjectFactory
-import org.gradle.api.provider.ProviderFactory
 import org.gradle.kotlin.dsl.domainObjectContainer
 import org.gradle.kotlin.dsl.newInstance
 import org.gradle.kotlin.dsl.property
@@ -12,21 +12,18 @@ import javax.inject.Inject
 /**
  * @author Silvio Giebl
  */
-abstract class MetadataExtensionImpl @Inject constructor(
-    objectFactory: ObjectFactory,
-    providerFactory: ProviderFactory
-) : MetadataExtension {
+abstract class MetadataExtensionImpl @Inject constructor(objectFactory: ObjectFactory) : MetadataExtension {
 
     final override val moduleName = objectFactory.property<String>()
     final override val readableName = objectFactory.property<String>()
     final override val url = objectFactory.property<String>()
     final override val docUrl = objectFactory.property<String>()
 
-    final override val organization = InitProviderImpl(providerFactory) {
+    final override val organization = objectFactory.initProvider {
         objectFactory.newInstance(OrganizationMetadata::class)
     }
 
-    final override val license = InitProviderImpl(providerFactory) {
+    final override val license = objectFactory.initProvider {
         objectFactory.newInstance(LicenseMetadata::class)
     }
 
@@ -34,16 +31,16 @@ abstract class MetadataExtensionImpl @Inject constructor(
         objectFactory.newInstance(DeveloperMetadataImpl::class, name)
     }
 
-    final override val scm = InitProviderImpl(providerFactory) {
+    final override val scm = objectFactory.initProvider {
         objectFactory.newInstance(ScmMetadata::class)
     }
 
-    final override val issueManagement = InitProviderImpl(providerFactory) {
+    final override val issueManagement = objectFactory.initProvider {
         objectFactory.newInstance(IssueManagementMetadata::class)
     }
 
-    final override val github: InitProviderImpl<GithubMetadata> = InitProviderImpl(providerFactory) {
-        objectFactory.newInstance(GithubMetadataImpl::class, this)
+    final override val github = objectFactory.initProvider<GithubMetadata> {
+        objectFactory.newInstance(GithubMetadataImpl::class)
     }
 
     init {
@@ -58,7 +55,13 @@ abstract class MetadataExtensionImpl @Inject constructor(
             system.convention(github.provider.flatMap { it.issuesUrl.map { "GitHub Issues" } })
             url.convention(github.provider.flatMap { it.issuesUrl })
         }
-        github.whenPresent { scm.configure {} }
+        github.whenPresent {
+            this as GithubMetadataImpl
+            scm.initialize()
+            issues.whenInitialized {
+                issueManagement.initialize()
+            }
+        }
     }
 
     override fun organization(action: Action<in OrganizationMetadata>) = organization.configure(action)
