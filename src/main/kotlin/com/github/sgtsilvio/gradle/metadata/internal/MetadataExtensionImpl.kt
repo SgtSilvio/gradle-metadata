@@ -3,6 +3,7 @@ package com.github.sgtsilvio.gradle.metadata.internal
 import com.github.sgtsilvio.gradle.metadata.*
 import com.github.sgtsilvio.gradle.metadata.internal.InitProviderImpl.Companion.initProvider
 import org.gradle.api.Action
+import org.gradle.api.Project
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.ProviderFactory
 import org.gradle.kotlin.dsl.domainObjectContainer
@@ -16,33 +17,29 @@ import javax.inject.Inject
 internal abstract class MetadataExtensionImpl @Inject constructor(
     objectFactory: ObjectFactory,
     providerFactory: ProviderFactory,
+    project: Project,
 ) : MetadataExtension {
 
     final override val moduleName = objectFactory.property<String>()
     final override val readableName = objectFactory.property<String>()
+    val description = providerFactory.provider { project.description }
     final override val url = objectFactory.property<String>()
     final override val docUrl = objectFactory.property<String>()
-
     final override val organization = providerFactory.initProvider {
         objectFactory.newInstance(OrganizationMetadata::class)
     }
-
     final override val license = providerFactory.initProvider {
         objectFactory.newInstance(LicenseMetadata::class)
     }
-
     final override val developers = objectFactory.domainObjectContainer(DeveloperMetadata::class) { name ->
         objectFactory.newInstance(DeveloperMetadataImpl::class, name)
     }
-
     final override val scm = providerFactory.initProvider {
         objectFactory.newInstance(ScmMetadata::class)
     }
-
     final override val issueManagement = providerFactory.initProvider {
         objectFactory.newInstance(IssueManagementMetadata::class)
     }
-
     final override val github = providerFactory.initProvider<GithubMetadata> {
         objectFactory.newInstance(GithubMetadataImpl::class)
     }

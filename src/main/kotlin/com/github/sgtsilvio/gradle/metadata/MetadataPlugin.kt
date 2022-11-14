@@ -26,7 +26,8 @@ class MetadataPlugin : Plugin<Project> {
         val metadata = project.extensions.create(
             MetadataExtension::class,
             EXTENSION_NAME,
-            MetadataExtensionImpl::class
+            MetadataExtensionImpl::class,
+            project,
         ) as MetadataExtensionImpl
 
         project.plugins.withId("org.gradle.maven-publish") {
@@ -41,7 +42,7 @@ class MetadataPlugin : Plugin<Project> {
         project.the<PublishingExtension>().publications.withType<MavenPublication>().configureEach {
             pom {
                 name.convention(metadata.readableName)
-                description.convention(project.provider { project.description })
+                description.convention(metadata.description)
                 url.convention(metadata.url)
                 metadata.organization.whenPresent {
                     organization {
@@ -87,7 +88,7 @@ class MetadataPlugin : Plugin<Project> {
         project.tasks.named(JavaPlugin.JAR_TASK_NAME) {
             configure<BundleTaskExtension> {
                 bnd("Bundle-Name=${project.name}")
-                bnd(project.provider { "Bundle-Description=${project.description}" })
+                bnd(metadata.description.map { description -> "Bundle-Description=$description" })
                 bnd(metadata.moduleName.map { moduleName -> "Automatic-Module-Name=$moduleName" })
                 bnd(metadata.moduleName.map { moduleName -> "Bundle-SymbolicName=$moduleName" })
                 metadata.organization.whenPresent { bnd(name.map { name -> "Bundle-Vendor=$name}" }) }
