@@ -23,7 +23,7 @@ Gradle plugin to ease defining project metadata:
 
 ```kotlin
 plugins {
-    id("com.github.sgtsilvio.gradle.metadata") version "0.3.0"
+    id("com.github.sgtsilvio.gradle.metadata") version "0.4.0"
 }
 
 metadata {
