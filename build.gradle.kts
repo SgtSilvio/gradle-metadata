@@ -40,24 +40,21 @@ dependencies {
 }
 
 gradlePlugin {
+    website.set(metadata.url)
+    vcsUrl.set(metadata.scm.get().url)
     plugins {
         create("metadata") {
             id = "$group.$name"
+            implementationClass = "$group.$name.MetadataPlugin"
             displayName = metadata.readableName.get()
             description = project.description
-            implementationClass = "$group.$name.MetadataPlugin"
+            tags.set(listOf("metadata", "pom", "meta-inf"))
         }
     }
 }
 
-pluginBundle {
-    website = metadata.url.get()
-    vcsUrl = metadata.scm.get().url.get()
-    tags = listOf("metadata", "pom", "meta-inf")
-}
-
 testing {
     suites.named<JvmTestSuite>("test") {
-        useJUnitJupiter(libs.versions.junit.jupiter.get())
+        useJUnitJupiter(libs.versions.junit.jupiter)
     }
 }
