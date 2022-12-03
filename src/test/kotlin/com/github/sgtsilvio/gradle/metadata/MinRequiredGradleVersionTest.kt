@@ -10,7 +10,7 @@ import java.io.File
 /**
  * @author Silvio Giebl
  */
-class MinRequiredGradleVersionTest {
+internal class MinRequiredGradleVersionTest {
 
     @Test
     fun allPropertiesWork(@TempDir projectDir: File) {

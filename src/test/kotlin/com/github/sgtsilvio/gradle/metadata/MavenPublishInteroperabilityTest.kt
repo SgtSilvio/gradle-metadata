@@ -10,7 +10,7 @@ import java.io.File
 /**
  * @author Silvio Giebl
  */
-class MavenPublishInteroperabilityTest {
+internal class MavenPublishInteroperabilityTest {
 
     @TempDir
     private lateinit var projectDir: File
