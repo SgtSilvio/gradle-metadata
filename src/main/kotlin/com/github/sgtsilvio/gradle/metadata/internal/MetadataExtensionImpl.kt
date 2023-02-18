@@ -5,6 +5,7 @@ import com.github.sgtsilvio.gradle.metadata.internal.InitProviderImpl.Companion.
 import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.model.ObjectFactory
+import org.gradle.api.provider.Provider
 import org.gradle.api.provider.ProviderFactory
 import org.gradle.kotlin.dsl.domainObjectContainer
 import org.gradle.kotlin.dsl.newInstance
@@ -22,7 +23,7 @@ internal abstract class MetadataExtensionImpl @Inject constructor(
 
     final override val moduleName = objectFactory.property<String>()
     final override val readableName = objectFactory.property<String>()
-    val description = providerFactory.provider { project.description }
+    val description: Provider<String> = providerFactory.provider { project.description }
     final override val url = objectFactory.property<String>()
     final override val docUrl = objectFactory.property<String>()
     final override val organization = providerFactory.initProvider {

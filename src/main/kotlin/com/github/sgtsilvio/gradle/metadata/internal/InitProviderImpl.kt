@@ -2,6 +2,7 @@ package com.github.sgtsilvio.gradle.metadata.internal
 
 import com.github.sgtsilvio.gradle.metadata.InitProvider
 import org.gradle.api.Action
+import org.gradle.api.provider.Provider
 import org.gradle.api.provider.ProviderFactory
 
 /**
@@ -18,7 +19,7 @@ internal class InitProviderImpl<T : Any> private constructor(
 
     private var initializer: (() -> T)? = initializer
     private var value: T? = null
-    override val provider = providerFactory.provider<T> { value }
+    override val provider: Provider<T> = providerFactory.provider { value }
     private var listeners: MutableList<Action<in T>>? = null
 
     fun initialize(): T {
