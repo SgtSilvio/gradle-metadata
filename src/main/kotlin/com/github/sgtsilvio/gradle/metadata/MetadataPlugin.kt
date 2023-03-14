@@ -16,6 +16,7 @@ import org.gradle.kotlin.dsl.withType
 /**
  * @author Silvio Giebl
  */
+@Suppress("unused")
 class MetadataPlugin : Plugin<Project> {
 
     companion object {
