@@ -14,11 +14,6 @@ Gradle plugin to ease defining project metadata:
 - issue management
 - github
 
-## Integration with Other Plugins
-
-- `maven-publish`: automatically configures pom metadata
-- `biz.aQute.bnd.builder`: automatically configures meta-inf metadata
-
 ## How to Use
 
 ```kotlin
@@ -54,3 +49,8 @@ metadata {
 ## Requirements
 
 - Gradle 6.0 or higher
+
+## Integration with Other Plugins
+
+- `maven-publish`: automatically configures pom metadata
+- `biz.aQute.bnd.builder`: automatically configures meta-inf metadata
