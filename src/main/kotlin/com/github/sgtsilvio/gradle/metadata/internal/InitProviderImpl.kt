@@ -19,8 +19,13 @@ internal class InitProviderImpl<T : Any> private constructor(
 
     private var initializer: (() -> T)? = initializer
     private var value: T? = null
-    override val provider: Provider<T> = providerFactory.provider { value }
     private var listeners: MutableList<Action<in T>>? = null
+    override val provider: Provider<T> = providerFactory.provider { value }
+    override val isPresent get() = value != null
+
+    override fun get() = provider.get()
+
+    override fun getOrNull() = value
 
     fun initialize(): T {
         var value = value

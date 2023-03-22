@@ -12,10 +12,9 @@ import org.gradle.api.provider.Provider
  */
 interface InitProvider<T : Any> {
     val provider: Provider<T>
-
-    fun get(): T = provider.get()
-    fun getOrNull(): T? = provider.orNull
-    fun isPresent(): Boolean = provider.isPresent
+    val isPresent: Boolean
+    fun get(): T
+    fun getOrNull(): T?
 
     /**
      * Configure the object, initializing it when not yet initialized.
