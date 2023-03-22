@@ -30,7 +30,7 @@ internal abstract class GithubMetadataImpl @Inject constructor(
     override fun pages() = pages.configure {}
 
     class Issues(github: GithubMetadataImpl) {
-        val url = github.url.map { url -> "$url/issues" }
+        val url: Provider<String> = github.url.map { url -> "$url/issues" }
     }
 
     class Pages(github: GithubMetadataImpl) {
