@@ -50,7 +50,7 @@ class MetadataPlugin : Plugin<Project> {
                 licenses {
                     metadata.license.whenPresent {
                         license {
-                            name.set(this@whenPresent.readableName)
+                            name.set(this@whenPresent.shortName)
                             url.set(this@whenPresent.url)
                         }
                     }
