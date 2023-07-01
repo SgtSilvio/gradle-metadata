@@ -1,6 +1,6 @@
 [versions]
-bnd = "6.3.1"
-junit-jupiter = "5.9.1"
+bnd = "6.4.0"
+junit-jupiter = "5.9.3"
 
 [libraries]
 bnd = { module = "biz.aQute.bnd:biz.aQute.bnd.gradle", version.ref = "bnd" }
