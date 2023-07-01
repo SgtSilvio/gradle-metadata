@@ -10,7 +10,7 @@ import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
-import org.gradle.kotlin.dsl.the
+import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
 
 /**
@@ -40,7 +40,7 @@ class MetadataPlugin : Plugin<Project> {
     }
 
     private fun setPomMetadata(project: Project, metadata: MetadataExtensionImpl) {
-        project.the<PublishingExtension>().publications.withType<MavenPublication>().configureEach {
+        project.extensions.getByType<PublishingExtension>().publications.withType<MavenPublication>().configureEach {
             pom {
                 name.convention(metadata.readableName)
                 description.convention(metadata.description)
