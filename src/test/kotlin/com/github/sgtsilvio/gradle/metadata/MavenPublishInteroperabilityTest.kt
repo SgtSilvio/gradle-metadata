@@ -135,19 +135,19 @@ internal class MavenPublishInteroperabilityTest {
     }
 
     @Test
-    fun whenOnlyLicenseReadableNameSet_thenOnlyLicenseNameInPom() {
+    fun whenOnlyLicenseShortNameSet_thenOnlyLicenseNameInPom() {
         test(
             """
             metadata {
                 license {
-                    readableName.set("Apache License, Version 2.0")
+                    shortName.set("Apache-2.0")
                 }
             }
             """.trimIndent(),
             """
             <licenses>
               <license>
-                <name>Apache License, Version 2.0</name>
+                <name>Apache-2.0</name>
               </license>
             </licenses>
             """.trimIndent(),
