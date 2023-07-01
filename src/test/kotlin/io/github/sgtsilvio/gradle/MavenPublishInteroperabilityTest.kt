@@ -1,4 +1,4 @@
-package com.github.sgtsilvio.gradle.metadata
+package io.github.sgtsilvio.gradle
 
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
@@ -25,7 +25,7 @@ internal class MavenPublishInteroperabilityTest {
             """
             |plugins {
             |    `maven-publish`
-            |    id("com.github.sgtsilvio.gradle.metadata")
+            |    id("io.github.sgtsilvio.gradle.metadata")
             |}
             |group = "com.example"
             |version = "1.2.3"

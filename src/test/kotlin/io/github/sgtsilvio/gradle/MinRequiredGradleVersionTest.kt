@@ -1,10 +1,8 @@
-package com.github.sgtsilvio.gradle.metadata
+package io.github.sgtsilvio.gradle
 
-import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import java.io.File
@@ -12,21 +10,20 @@ import java.io.File
 /**
  * @author Silvio Giebl
  */
-internal class ConfigurationCacheTest {
+internal class MinRequiredGradleVersionTest {
 
     @Test
-    fun configurationCacheReused(@TempDir projectDir: File) {
+    fun allPropertiesWork(@TempDir projectDir: File) {
         projectDir.resolve("settings.gradle.kts").writeText(
             """
             rootProject.name = "test"
             """.trimIndent()
         )
-        // TODO developers do not work, probably an incompatibility of maven-publish with the configuration cache
         projectDir.resolve("build.gradle.kts").writeText(
             """
             plugins {
                 `maven-publish`
-                id("com.github.sgtsilvio.gradle.metadata")
+                id("io.github.sgtsilvio.gradle.metadata")
             }
             group = "com.example"
             version = "1.2.3"
@@ -43,6 +40,12 @@ internal class ConfigurationCacheTest {
                 license {
                     apache2()
                 }
+                developers {
+                    register("jdoe") {
+                        fullName.set("John Doe")
+                        email.set("john.doe@example.com")
+                    }
+                }
                 github {
                     issues()
                 }
@@ -52,32 +55,17 @@ internal class ConfigurationCacheTest {
         )
 
         val result = GradleRunner.create()
+            .withGradleVersion("6.0")
             .withProjectDir(projectDir)
             .withPluginClasspath()
-            .withArguments("generatePomFileForMavenPublication", "--configuration-cache")
+            .withArguments("generatePomFileForMavenPublication")
             .build()
 
-        assertTrue(result.output.contains("Configuration cache entry stored"))
-        check(result, projectDir)
-
-        projectDir.resolve("build").deleteRecursively()
-
-        val result2 = GradleRunner.create()
-            .withProjectDir(projectDir)
-            .withPluginClasspath()
-            .withArguments("generatePomFileForMavenPublication", "--configuration-cache")
-            .build()
-
-        assertTrue(result2.output.contains("Configuration cache entry reused"))
-        check(result2, projectDir)
-    }
-
-    private fun check(result: BuildResult, projectDir: File) {
         assertEquals(TaskOutcome.SUCCESS, result.task(":generatePomFileForMavenPublication")?.outcome)
         assertEquals(
             """
             <?xml version="1.0" encoding="UTF-8"?>
-            <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+            <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
               <modelVersion>4.0.0</modelVersion>
               <groupId>com.example</groupId>
@@ -97,6 +85,13 @@ internal class ConfigurationCacheTest {
                   <url>https://spdx.org/licenses/Apache-2.0.html</url>
                 </license>
               </licenses>
+              <developers>
+                <developer>
+                  <id>jdoe</id>
+                  <name>John Doe</name>
+                  <email>john.doe@example.com</email>
+                </developer>
+              </developers>
               <scm>
                 <connection>scm:git:https://github.com/example/test.git</connection>
                 <developerConnection>scm:git:https://github.com/example/test.git</developerConnection>

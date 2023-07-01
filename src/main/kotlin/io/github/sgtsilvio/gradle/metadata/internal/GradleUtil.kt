@@ -1,4 +1,4 @@
-package com.github.sgtsilvio.gradle.metadata.internal
+package io.github.sgtsilvio.gradle.metadata.internal
 
 import org.gradle.api.provider.Provider
 import org.gradle.util.GradleVersion
