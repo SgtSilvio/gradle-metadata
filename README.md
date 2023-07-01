@@ -22,24 +22,23 @@ plugins {
 }
 
 metadata {
-    moduleName.set("io.github.sgtsilvio.gradle.metadata")
-    readableName.set("Metadata for gradle projects")
+    moduleName.set("org.example.library")
+    readableName.set("Example library")
     license {
         apache2()
     }
     organization {
-        name.set("testorg")
-        url.set("https://www.testorg.example/")
+        name.set("Example Org")
+        url.set("https://www.example.org")
     }
     developers {
         register("jdoe") {
             fullName.set("John Doe")
-            email.set("john@doe.example")
+            email.set("john.doe@example.org")
         }
     }
     github {
-        org.set("SgtSilvio")
-        repo.set("gradle-metadata")
+        org.set("example")
         pages()
         issues()
     }
