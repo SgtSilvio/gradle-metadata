@@ -160,14 +160,14 @@ internal class MavenPublishInteroperabilityTest {
             """
             metadata {
                 license {
-                    url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                    url.set("https://spdx.org/licenses/Apache-2.0.html")
                 }
             }
             """.trimIndent(),
             """
             <licenses>
               <license>
-                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+                <url>https://spdx.org/licenses/Apache-2.0.html</url>
               </license>
             </licenses>
             """.trimIndent(),
@@ -187,8 +187,8 @@ internal class MavenPublishInteroperabilityTest {
             """
             <licenses>
               <license>
-                <name>Apache License, Version 2.0</name>
-                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+                <name>Apache-2.0</name>
+                <url>https://spdx.org/licenses/Apache-2.0.html</url>
               </license>
             </licenses>
             """.trimIndent(),
@@ -560,8 +560,8 @@ internal class MavenPublishInteroperabilityTest {
             </organization>
             <licenses>
               <license>
-                <name>Apache License, Version 2.0</name>
-                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+                <name>Apache-2.0</name>
+                <url>https://spdx.org/licenses/Apache-2.0.html</url>
               </license>
             </licenses>
             <developers>
