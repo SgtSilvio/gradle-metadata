@@ -90,8 +90,8 @@ class MetadataPlugin : Plugin<Project> {
                 bnd(metadata.moduleName.map { moduleName -> "Bundle-SymbolicName=$moduleName" })
                 metadata.organization.whenPresent { bnd(name.map { name -> "Bundle-Vendor=$name}" }) }
                 metadata.license.whenPresent {
-                    bnd(shortName.merge(readableName, url) { shortName, readableName, url ->
-                        "Bundle-License=$shortName;description=\"$readableName\";link=\"$url\""
+                    bnd(shortName.merge(fullName, url) { shortName, fullName, url ->
+                        "Bundle-License=$shortName;description=\"$fullName\";link=\"$url\""
                     })
                 }
                 bnd(metadata.docUrl.map { docUrl -> "Bundle-DocURL=$docUrl" })
