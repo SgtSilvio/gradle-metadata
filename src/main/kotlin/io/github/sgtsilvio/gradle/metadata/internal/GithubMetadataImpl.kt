@@ -18,7 +18,7 @@ internal abstract class GithubMetadataImpl @Inject constructor(
 
     final override val org = objectFactory.property<String>()
     final override val repo = objectFactory.property<String>()
-    final override val url = org.merge(repo) { org, repo -> "https://github.com/$org/$repo" }
+    final override val url: Provider<String> = org.zip(repo) { org, repo -> "https://github.com/$org/$repo" }
     final override val vcsUrl: Provider<String> = url.map { url -> "$url.git" }
     val issues = providerFactory.initProvider { Issues(this) }
     private val pages = providerFactory.initProvider { Pages(this) }
@@ -34,6 +34,6 @@ internal abstract class GithubMetadataImpl @Inject constructor(
     }
 
     class Pages(github: GithubMetadataImpl) {
-        val url = github.org.merge(github.repo) { org, repo -> "https://$org.github.io/$repo/" }
+        val url: Provider<String> = github.org.zip(github.repo) { org, repo -> "https://$org.github.io/$repo/" }
     }
 }

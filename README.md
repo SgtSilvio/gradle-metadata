@@ -47,7 +47,7 @@ metadata {
 
 ## Requirements
 
-- Gradle 6.0 or higher
+- Gradle 6.6 or higher
 
 ## Integration with Other Plugins
 

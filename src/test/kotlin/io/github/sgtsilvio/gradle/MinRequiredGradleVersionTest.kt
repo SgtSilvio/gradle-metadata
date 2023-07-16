@@ -55,7 +55,7 @@ internal class MinRequiredGradleVersionTest {
         )
 
         val result = GradleRunner.create()
-            .withGradleVersion("6.0")
+            .withGradleVersion("6.6")
             .withProjectDir(projectDir)
             .withPluginClasspath()
             .withArguments("generatePomFileForMavenPublication")

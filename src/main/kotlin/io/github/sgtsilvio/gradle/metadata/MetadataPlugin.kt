@@ -2,7 +2,7 @@ package io.github.sgtsilvio.gradle.metadata
 
 import aQute.bnd.gradle.BundleTaskExtension
 import io.github.sgtsilvio.gradle.metadata.internal.MetadataExtensionImpl
-import io.github.sgtsilvio.gradle.metadata.internal.merge
+import io.github.sgtsilvio.gradle.metadata.internal.zip
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
@@ -90,13 +90,13 @@ class MetadataPlugin : Plugin<Project> {
                 bnd(metadata.moduleName.map { moduleName -> "Bundle-SymbolicName=$moduleName" })
                 metadata.organization.whenPresent { bnd(name.map { name -> "Bundle-Vendor=$name}" }) }
                 metadata.license.whenPresent {
-                    bnd(shortName.merge(fullName, url) { shortName, fullName, url ->
+                    bnd(shortName.zip(fullName, url) { shortName, fullName, url ->
                         "Bundle-License=$shortName;description=\"$fullName\";link=\"$url\""
                     })
                 }
                 bnd(metadata.docUrl.map { docUrl -> "Bundle-DocURL=$docUrl" })
                 metadata.scm.whenPresent {
-                    bnd(url.merge(connection, developerConnection) { url, connection, devConnection ->
+                    bnd(url.zip(connection, developerConnection) { url, connection, devConnection ->
                         "Bundle-SCM=url=\"$url\";connection=\"$connection\";developerConnection=\"$devConnection\""
                     })
                 }
