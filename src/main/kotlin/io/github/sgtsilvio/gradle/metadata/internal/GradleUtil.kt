@@ -7,7 +7,7 @@ internal fun <A : Any, B : Any, R : Any> Provider<A>.merge(bProvider: Provider<B
     return if (supportsZip()) {
         zip(bProvider, merger)
     } else {
-        map { a -> merger.invoke(a, bProvider.get()) }
+        map { a -> merger(a, bProvider.get()) }
     }
 }
 
@@ -17,9 +17,9 @@ internal fun <A : Any, B : Any, C : Any, R : Any> Provider<A>.merge(
     merger: (A, B, C) -> R
 ): Provider<R> {
     return if (supportsZip()) {
-        zip(bProvider) { a, b -> Pair(a, b) }.zip(cProvider) { ab, c -> merger.invoke(ab.first, ab.second, c) }
+        zip(bProvider) { a, b -> Pair(a, b) }.zip(cProvider) { ab, c -> merger(ab.first, ab.second, c) }
     } else {
-        map { a -> merger.invoke(a, bProvider.get(), cProvider.get()) }
+        map { a -> merger(a, bProvider.get(), cProvider.get()) }
     }
 }
 

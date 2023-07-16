@@ -30,7 +30,7 @@ internal class InitProviderImpl<T : Any> private constructor(
     fun initialize(): T {
         var value = value
         if (value == null) {
-            value = initializer!!.invoke()
+            value = initializer!!()
             initializer = null
             this.value = value
             val listeners = listeners
