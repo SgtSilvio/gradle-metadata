@@ -1,8 +1,6 @@
 package io.github.sgtsilvio.gradle.metadata
 
 import aQute.bnd.gradle.BundleTaskExtension
-import io.github.sgtsilvio.gradle.metadata.internal.MetadataExtensionImpl
-import io.github.sgtsilvio.gradle.metadata.internal.zip
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin

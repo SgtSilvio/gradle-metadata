@@ -1,6 +1,5 @@
-package io.github.sgtsilvio.gradle.metadata.internal
+package io.github.sgtsilvio.gradle.metadata
 
-import io.github.sgtsilvio.gradle.metadata.DeveloperMetadata
 import javax.inject.Inject
 
 /**

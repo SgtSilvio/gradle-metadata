@@ -10,7 +10,7 @@ import org.gradle.api.provider.Provider
  * @param T type of the provided object.
  * @author Silvio Giebl
  */
-interface InitProvider<T : Any> {
+sealed interface InitProvider<T : Any> {
     val provider: Provider<T>
     val isPresent: Boolean
     fun get(): T

@@ -1,6 +1,5 @@
-package io.github.sgtsilvio.gradle.metadata.internal
+package io.github.sgtsilvio.gradle.metadata
 
-import io.github.sgtsilvio.gradle.metadata.InitProvider
 import org.gradle.api.Action
 import org.gradle.api.provider.Provider
 import org.gradle.api.provider.ProviderFactory
@@ -8,14 +7,7 @@ import org.gradle.api.provider.ProviderFactory
 /**
  * @author Silvio Giebl
  */
-internal class InitProviderImpl<T : Any> private constructor(
-    providerFactory: ProviderFactory,
-    initializer: () -> T,
-) : InitProvider<T> {
-
-    companion object {
-        fun <T : Any> ProviderFactory.initProvider(initializer: () -> T) = InitProviderImpl(this, initializer)
-    }
+internal class InitProviderImpl<T : Any>(providerFactory: ProviderFactory, initializer: () -> T) : InitProvider<T> {
 
     private var initializer: (() -> T)? = initializer
     private var value: T? = null
@@ -60,3 +52,5 @@ internal class InitProviderImpl<T : Any> private constructor(
         }
     }
 }
+
+internal fun <T : Any> ProviderFactory.initProvider(initializer: () -> T) = InitProviderImpl(this, initializer)
