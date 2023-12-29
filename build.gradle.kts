@@ -10,24 +10,24 @@ group = "io.github.sgtsilvio.gradle"
 description = "Gradle plugin to ease defining project metadata (urls, license, scm)"
 
 metadata {
-    readableName.set("Metadata for Gradle Projects")
+    readableName = "Metadata for Gradle Projects"
     license {
         apache2()
     }
     developers {
         register("SgtSilvio") {
-            fullName.set("Silvio Giebl")
+            fullName = "Silvio Giebl"
         }
     }
     github {
-        org.set("SgtSilvio")
+        org = "SgtSilvio"
         issues()
     }
 }
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(8))
+        languageVersion = JavaLanguageVersion.of(8)
     }
 }
 
@@ -40,15 +40,15 @@ dependencies {
 }
 
 gradlePlugin {
-    website.set(metadata.url)
-    vcsUrl.set(metadata.scm.get().url)
+    website = metadata.url
+    vcsUrl = metadata.scm.get().url
     plugins {
         create("metadata") {
             id = "$group.$name"
             implementationClass = "$group.$name.MetadataPlugin"
             displayName = metadata.readableName.get()
             description = project.description
-            tags.set(listOf("metadata", "pom", "meta-inf"))
+            tags = listOf("metadata", "pom", "meta-inf")
         }
     }
 }
