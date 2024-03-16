@@ -7,10 +7,10 @@ plugins {
 }
 
 group = "io.github.sgtsilvio.gradle"
-description = "Gradle plugin to ease defining project metadata (urls, license, scm)"
 
 metadata {
     readableName = "Metadata for Gradle Projects"
+    description = "Gradle plugin to ease defining project metadata (urls, license, scm)"
     license {
         apache2()
     }
