@@ -10,6 +10,7 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
+import org.gradle.plugin.devel.GradlePluginDevelopmentExtension
 
 /**
  * @author Silvio Giebl
@@ -30,6 +31,9 @@ class MetadataPlugin : Plugin<Project> {
         }
         project.plugins.withId("biz.aQute.bnd.builder") {
             setBndMetadata(project, metadata)
+        }
+        project.plugins.withId("org.gradle.java-gradle-plugin") {
+            setGradlePluginMetadata(project, metadata)
         }
     }
 
@@ -98,6 +102,18 @@ class MetadataPlugin : Plugin<Project> {
                         "Bundle-SCM=url=\"$url\";connection=\"$connection\";developerConnection=\"$devConnection\""
                     })
                 }
+            }
+        }
+    }
+
+    private fun setGradlePluginMetadata(project: Project, metadata: MetadataExtensionImpl) {
+        val gradlePluginExtension = project.extensions.getByType<GradlePluginDevelopmentExtension>()
+        gradlePluginExtension.website.convention(metadata.url)
+        gradlePluginExtension.vcsUrl.convention(metadata.scm.provider.flatMap { it.url })
+        project.afterEvaluate {
+            gradlePluginExtension.plugins.configureEach {
+                if (displayName == null) displayName = metadata.readableName.get()
+                if (description == null) description = metadata.description.get()
             }
         }
     }
