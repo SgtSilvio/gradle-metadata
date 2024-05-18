@@ -53,3 +53,4 @@ metadata {
 
 - `maven-publish`: automatically configures pom metadata
 - `biz.aQute.bnd.builder`: automatically configures meta-inf metadata
+- `java-gradle-plugin`: automatically configures Gradle plugin metadata
