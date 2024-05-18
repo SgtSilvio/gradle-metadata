@@ -8,4 +8,4 @@ bnd = { module = "biz.aQute.bnd:biz.aQute.bnd.gradle", version.ref = "bnd" }
 [plugins]
 pluginPublish = { id = "com.gradle.plugin-publish", version = "1.2.1" }
 defaults = { id = "io.github.sgtsilvio.gradle.defaults", version = "0.2.0" }
-metadata = { id = "io.github.sgtsilvio.gradle.metadata", version = "0.5.0" }
+metadata = { id = "io.github.sgtsilvio.gradle.metadata", version = "0.6.0" }

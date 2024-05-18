@@ -40,14 +40,10 @@ dependencies {
 }
 
 gradlePlugin {
-    website = metadata.url
-    vcsUrl = metadata.scm.get().url
     plugins {
         create("metadata") {
             id = "$group.$name"
             implementationClass = "$group.$name.MetadataPlugin"
-            displayName = metadata.readableName.get()
-            description = project.description
             tags = listOf("metadata", "pom", "meta-inf")
         }
     }
