@@ -23,9 +23,13 @@ internal abstract class GithubMetadataImpl @Inject constructor(
     final override val issuesUrl: Provider<String> get() = issues.provider.flatMap { it.url }
     final override val pagesUrl: Provider<String> get() = pages.provider.flatMap { it.url }
 
-    override fun issues() = issues.configure {}
+    override fun issues() {
+        issues.initialize()
+    }
 
-    override fun pages() = pages.configure {}
+    override fun pages() {
+        pages.initialize()
+    }
 
     class Issues(github: GithubMetadataImpl) {
         val url: Provider<String> = github.url.map { url -> "$url/issues" }
