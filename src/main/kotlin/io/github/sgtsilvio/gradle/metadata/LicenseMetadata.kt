@@ -10,6 +10,12 @@ interface LicenseMetadata {
     val fullName: Property<String>
     val url: Property<String>
 
+    fun mit() {
+        shortName.set("MIT")
+        fullName.set("MIT License")
+        url.set("https://spdx.org/licenses/MIT.html")
+    }
+
     fun apache2() {
         shortName.set("Apache-2.0")
         fullName.set("Apache License 2.0")
