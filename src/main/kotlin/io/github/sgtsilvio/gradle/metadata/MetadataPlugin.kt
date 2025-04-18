@@ -86,7 +86,7 @@ class MetadataPlugin : Plugin<Project> {
     private fun setBndMetadata(project: Project, metadata: MetadataExtensionImpl) {
         project.tasks.named(JavaPlugin.JAR_TASK_NAME) {
             configure<BundleTaskExtension> {
-                bnd("Bundle-Name=${project.name}")
+                bnd(metadata.readableName.map { readableName -> "Bundle-Name=$readableName" })
                 bnd(metadata.description.map { description -> "Bundle-Description=$description" })
                 bnd(metadata.moduleName.map { moduleName -> "Automatic-Module-Name=$moduleName" })
                 bnd(metadata.moduleName.map { moduleName -> "Bundle-SymbolicName=$moduleName" })
