@@ -1,7 +1,6 @@
 package io.github.sgtsilvio.gradle.metadata
 
 import org.gradle.api.Action
-import org.gradle.api.provider.Provider
 import org.gradle.api.provider.ProviderFactory
 
 /**
@@ -12,7 +11,7 @@ internal class InitProviderImpl<T : Any>(providerFactory: ProviderFactory, initi
     private var initializer: (() -> T)? = initializer
     private var value: T? = null
     private var listeners: MutableList<Action<in T>>? = null
-    override val provider: Provider<T> = providerFactory.provider { value }
+    override val provider = providerFactory.provider { value }
     override val isPresent get() = value != null
 
     override fun get() = provider.get()
