@@ -1,3 +1,4 @@
+import org.gradle.plugin.compatibility.compatibility
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
@@ -52,6 +53,11 @@ gradlePlugin {
             id = "$group.$name"
             implementationClass = "$group.$name.MetadataPlugin"
             tags = listOf("metadata", "pom", "meta-inf")
+            compatibility {
+                features {
+                    configurationCache = true
+                }
+            }
         }
     }
 }
