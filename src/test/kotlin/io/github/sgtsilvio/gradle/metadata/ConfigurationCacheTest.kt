@@ -21,7 +21,6 @@ internal class ConfigurationCacheTest {
             rootProject.name = "test"
             """.trimIndent()
         )
-        // TODO developers do not work, probably an incompatibility of maven-publish with the configuration cache
         projectDir.resolve("build.gradle.kts").writeText(
             """
             plugins {
@@ -42,6 +41,12 @@ internal class ConfigurationCacheTest {
                 }
                 license {
                     apache2()
+                }
+                developers {
+                    register("jdoe") {
+                        fullName.set("John Doe")
+                        email.set("john.doe@example.com")
+                    }
                 }
                 github {
                     issues()
@@ -97,6 +102,13 @@ internal class ConfigurationCacheTest {
                   <url>https://spdx.org/licenses/Apache-2.0.html</url>
                 </license>
               </licenses>
+              <developers>
+                <developer>
+                  <id>jdoe</id>
+                  <name>John Doe</name>
+                  <email>john.doe@example.com</email>
+                </developer>
+              </developers>
               <scm>
                 <connection>scm:git:https://github.com/example/test.git</connection>
                 <developerConnection>scm:git:https://github.com/example/test.git</developerConnection>
