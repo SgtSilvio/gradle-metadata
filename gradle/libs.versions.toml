@@ -1,5 +1,5 @@
 [versions]
-bnd = "7.2.3"
+bnd = "7.3.0"
 junit-jupiter = "5.14.4"
 
 [libraries]
