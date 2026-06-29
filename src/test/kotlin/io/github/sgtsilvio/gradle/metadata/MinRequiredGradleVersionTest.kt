@@ -1,5 +1,7 @@
 package io.github.sgtsilvio.gradle.metadata
 
+import io.github.sgtsilvio.gradle.testkit.addArguments
+import io.github.sgtsilvio.gradle.testkit.withJavaHome
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -58,7 +60,8 @@ internal class MinRequiredGradleVersionTest {
             .withGradleVersion("7.0")
             .withProjectDir(projectDir)
             .withPluginClasspath()
-            .withArguments("generatePomFileForMavenPublication")
+            .withJavaHome(System.getProperty("java.home.8"))
+            .addArguments("generatePomFileForMavenPublication")
             .build()
 
         assertEquals(TaskOutcome.SUCCESS, result.task(":generatePomFileForMavenPublication")?.outcome)
