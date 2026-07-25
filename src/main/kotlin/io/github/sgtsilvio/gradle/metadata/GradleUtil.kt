@@ -6,4 +6,4 @@ internal fun <A : Any, B : Any, C : Any, R : Any> Provider<A>.zip(
     bProvider: Provider<B>,
     cProvider: Provider<C>,
     combiner: (A, B, C) -> R,
-): Provider<R> = zip(bProvider) { a, b -> Pair(a, b) }.zip(cProvider) { ab, c -> combiner(ab.first, ab.second, c) }
+): Provider<R> = zip(bProvider) { a, b -> Pair(a, b) }.zip(cProvider) { (a, b), c -> combiner(a, b, c) }
