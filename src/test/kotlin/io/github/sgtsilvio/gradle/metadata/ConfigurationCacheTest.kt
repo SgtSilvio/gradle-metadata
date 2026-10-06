@@ -59,7 +59,11 @@ internal class ConfigurationCacheTest {
         val result = GradleRunner.create()
             .withProjectDir(projectDir)
             .withPluginClasspath()
-            .withArguments("generatePomFileForMavenPublication", "--configuration-cache")
+            .withArguments(
+                "generatePomFileForMavenPublication",
+                "--configuration-cache",
+                "-Dorg.gradle.unsafe.isolated-projects=true",
+            )
             .build()
 
         assertTrue(result.output.contains("Configuration cache entry stored"))
@@ -70,7 +74,11 @@ internal class ConfigurationCacheTest {
         val result2 = GradleRunner.create()
             .withProjectDir(projectDir)
             .withPluginClasspath()
-            .withArguments("generatePomFileForMavenPublication", "--configuration-cache")
+            .withArguments(
+                "generatePomFileForMavenPublication",
+                "--configuration-cache",
+                "-Dorg.gradle.unsafe.isolated-projects=true",
+            )
             .build()
 
         assertTrue(result2.output.contains("Configuration cache entry reused"))
